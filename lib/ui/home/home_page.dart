@@ -52,6 +52,15 @@ class HomePage extends GetView<HomeController> {
               },
             ),
           ),
+          Center(
+            child: ElevatedButton(
+              child: Text("Reset"),
+              style: ElevatedButton.styleFrom(primary: Colors.deepPurple),
+              onPressed: () {
+                controller.resetCount();
+              },
+            ),
+          ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -60,7 +69,6 @@ class HomePage extends GetView<HomeController> {
           controller.increment();
         },
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       bottomNavigationBar: ValueBuilder<int>(
         initialValue: 0,
         builder: (value, updateFn) => Container(
@@ -68,18 +76,17 @@ class HomePage extends GetView<HomeController> {
           child: BubbleBottomBar(
             opacity: .2,
             currentIndex: value,
-            onTap: (tab)  {
-              controller.pageCotroller.animateToPage(tab, duration: controller.animationDuration, curve: Curves.ease);
+            onTap: (tab) {
+              controller.pageCotroller.animateToPage(tab,
+                  duration: controller.animationDuration, curve: Curves.ease);
               updateFn(tab);
             },
-            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+            borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
             elevation: 8.0,
             hasInk: true,
-            hasNotch: true,
-            fabLocation: BubbleBottomBarFabLocation.end,
             items: controller.navigationItems,
           ),
-        ) ,
+        ),
       ),
     );
   }

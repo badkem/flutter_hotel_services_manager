@@ -8,46 +8,29 @@ class NavigationService {
     return <BubbleBottomBarItem>[
       BubbleBottomBarItem(
           backgroundColor: AppColors.bottomBarColor,
-          icon: Icon(
-            Icons.home,
-            color: Colors.black54,
-          ),
-          activeIcon: Icon(Icons.home),
-          title: Text("Home")),
+          icon: Image.asset("assets/images/ic_food_2.png", height: 24,),
+          activeIcon: Image.asset("assets/images/ic_food_2.png", height: 18,),
+          title: Text("Foods", style: TextStyle(fontSize: 14),)),
       BubbleBottomBarItem(
           backgroundColor: AppColors.bottomBarColor,
-          icon: Icon(
-            Icons.search,
-            color: Colors.black54,
-          ),
-          activeIcon: Icon(Icons.search),
-          title: Text("Search")),
+          icon: Image.asset("assets/images/ic_laundry_2.png", height: 24,),
+          activeIcon: Image.asset("assets/images/ic_laundry_2.png", height: 18,),
+          title: Text("Laundry", style: TextStyle(fontSize: 14),)),
       BubbleBottomBarItem(
           backgroundColor: AppColors.bottomBarColor,
-          icon: Badge(
-            padding:
-            EdgeInsets.only(top: 5.0, bottom: 5.0, right: 4.0, left: 5.0),
-            animationType: BadgeAnimationType.scale,
-            animationDuration: Duration(milliseconds: 200),
-            badgeContent: Text(
-              '7',
-              style: TextStyle(fontSize: 12, color: Colors.white),
-            ),
-            child: Icon(
-              Icons.notifications,
-              color: Colors.black54,
-            ),
-          ),
-          activeIcon: Icon(Icons.notifications),
-          title: Text("Notify")),
+          icon: Image.asset("assets/images/ic_tourist.png", height: 24, color: Colors.black,),
+          activeIcon: Image.asset("assets/images/ic_tourist.png", height: 18, color: Colors.black,),
+          title: Text("Activity", style: TextStyle(fontSize: 14),)),
       BubbleBottomBarItem(
           backgroundColor: AppColors.bottomBarColor,
-          icon: Icon(
-            Icons.apartment,
-            color: Colors.black54,
-          ),
-          activeIcon: Icon(Icons.person),
-          title: Text("Profile"))
+          icon: Image.asset("assets/images/ic_do_not_distrup.png", height: 22, color: Colors.black,),
+          activeIcon: Image.asset("assets/images/ic_do_not_distrup.png", height: 14, color: Colors.black,),
+          title: Text("Don't Distrup", style: TextStyle(fontSize: 12),)),
+      BubbleBottomBarItem(
+          backgroundColor: AppColors.bottomBarColor,
+          icon: Image.asset("assets/images/ic_hotel.png", height: 24,),
+          activeIcon: Image.asset("assets/images/ic_hotel.png", height: 14,),
+          title: Text("Information", style: TextStyle(fontSize: 12),)),
     ];
   }
 }

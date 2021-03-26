@@ -13,17 +13,20 @@ class HomeController extends GetxController {
     navigationItems = NavigationService().getNavigationItemList();
     super.onInit();
   }
+
   @override
   void onReady() {
     // TODO: implement onReady
     super.onReady();
   }
+
   @override
   void onClose() {
     pageCotroller.dispose();
     Get.delete();
     super.onClose();
   }
+
   var count = 0.obs;
 
   increment() => count++;
