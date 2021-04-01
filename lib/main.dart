@@ -7,19 +7,21 @@ import 'package:khoaluantotnghiep2021/ui/theme/app_theme.dart';
 
 import 'routes/app_pages.dart';
 
-void main() => runApp(
-      GetMaterialApp(
-        initialBinding: MainBinding(),
-        initialRoute: Routes.INITIAL,
-        theme: appThemeData,
-        getPages: AppPages.pages,
-        home: HomePage(),
-        translations: LocalizationService(),
-        locale: LocalizationService.locale,
-        fallbackLocale: LocalizationService.fallbackLocale,
-        defaultTransition: Transition.cupertino,
-        transitionDuration: Get.defaultTransitionDuration,
-        debugShowCheckedModeBanner: false,
-      ),
-    );
+void main() async {
+  MainBinding().dependencies();
+  runApp(
+    GetMaterialApp(
+      initialRoute: Routes.INITIAL,
+      theme: appThemeData,
+      getPages: AppPages.pages,
+      home: HomePage(),
+      translations: LocalizationService(),
+      locale: LocalizationService.locale,
+      fallbackLocale: LocalizationService.fallbackLocale,
+      defaultTransition: Transition.cupertino,
+      transitionDuration: Get.defaultTransitionDuration,
+      debugShowCheckedModeBanner: false,
+    ),
+  );
+}
 
