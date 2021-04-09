@@ -11,7 +11,7 @@ void main() async {
   MainBinding().dependencies();
   runApp(
     GetMaterialApp(
-      initialRoute: Routes.INITIAL,
+      initialRoute: Routes.LOGIN,
       theme: appThemeData,
       getPages: AppPages.pages,
       home: HomePage(),
