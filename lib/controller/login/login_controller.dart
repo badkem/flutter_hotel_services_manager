@@ -43,6 +43,9 @@ class LoginController extends GetxController {
     }
   }
 
+  login() async {
+
+  }
   showDialog(){
     return Get.defaultDialog(
         title: "Login Failed",

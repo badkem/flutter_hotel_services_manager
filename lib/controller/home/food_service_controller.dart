@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:khoaluantotnghiep2021/data/model/cart_model.dart';
-import 'package:khoaluantotnghiep2021/data/model/food_cart_model.dart';
-import 'package:khoaluantotnghiep2021/data/model/product_model.dart';
+import 'package:khoaluantotnghiep2021/data/model/product.dart';
 
 class FoodServiceController extends GetxController with SingleGetTickerProviderMixin {
 

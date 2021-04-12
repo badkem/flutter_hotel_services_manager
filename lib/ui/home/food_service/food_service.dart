@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:khoaluantotnghiep2021/controller/home/food_service_controller.dart';
-import 'package:khoaluantotnghiep2021/data/model/cart_model.dart';
 import 'package:khoaluantotnghiep2021/ui/theme/app_colors.dart';
 
 class FoodService extends GetView<FoodServiceController> {

@@ -51,38 +51,10 @@ class HomePage extends GetView<HomeController> {
                 physics: NeverScrollableScrollPhysics(),
                 children: [
                   FoodService(),
-                  Center(
-                    child: ElevatedButton(
-                      child: Text("Reset"),
-                      style:
-                          ElevatedButton.styleFrom(primary: Colors.deepPurple),
-                      onPressed: () {},
-                    ),
-                  ),
-                  Center(
-                    child: ElevatedButton(
-                      child: Text("Reset"),
-                      style:
-                          ElevatedButton.styleFrom(primary: Colors.deepPurple),
-                      onPressed: () {},
-                    ),
-                  ),
-                  Center(
-                    child: ElevatedButton(
-                      child: Text("Reset"),
-                      style:
-                          ElevatedButton.styleFrom(primary: Colors.deepPurple),
-                      onPressed: () {},
-                    ),
-                  ),
-                  Center(
-                    child: ElevatedButton(
-                      child: Text("Reset"),
-                      style:
-                          ElevatedButton.styleFrom(primary: Colors.deepPurple),
-                      onPressed: () {},
-                    ),
-                  ),
+                  Text("Ok"),
+                  Text("Ok"),
+                  Text("Ok"),
+                  Text("Ok"),
                 ],
               ),
             ),
