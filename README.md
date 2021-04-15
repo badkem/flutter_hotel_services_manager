@@ -7,6 +7,8 @@ UI ✅
 
 backend:
 Login ✅
+Food Page:
+- Fetch foods✅
 
 
 
