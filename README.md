@@ -1,6 +1,6 @@
 # Khóa luận tốt nghiệp 2021
 
-Quản lý khách sạn
+Dean Hotel Manager with Flutter
 
 
 - UI ✅
