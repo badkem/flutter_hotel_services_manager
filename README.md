@@ -1,6 +1,6 @@
 # Khóa luận tốt nghiệp 2021
 
-Dean Hotel Manager with Flutter
+Dean Hotel Manager Flutter with GetX pattern.
 
 
 - UI ✅
