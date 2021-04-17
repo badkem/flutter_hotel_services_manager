@@ -17,11 +17,11 @@ class LoginController extends GetxController {
   var user = User().obs;
 
   void checkRoomExist() async {
-    if(textRoomName.text.isNotEmpty && textLabel.text.isNotEmpty)
+    if (textRoomName.text.isNotEmpty && textLabel.text.isNotEmpty) {
       try {
         isLoading(true);
-        var roomData =  await LoginProvider().checkRoomExistRequest(roomName, label);
-        if(room != null){
+       var roomData = await LoginProvider().checkRoomExistRequest(roomName, label);
+        if (room != null) {
           room.value = roomData;
           login(label, roomName);
           guestName.value = room.value.data.customerName;
@@ -29,17 +29,21 @@ class LoginController extends GetxController {
           print(room.value.success);
           print(room.value.data);
         }
-      } finally {
+      }
+      catch(e) {
+        showDialog();
+      }
+      finally {
         isLoading(false);
       }
-    else showDialog();
+    } else showDialog();
   }
 
   void login(roomLabel, roomName) async {
     try {
       isLoading(true);
       var userData = await LoginProvider().loginRequest(roomLabel, roomName);
-      if(user != null){
+      if (user != null) {
         user.value = userData;
         print(user.value.data.user);
         SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -51,7 +55,7 @@ class LoginController extends GetxController {
     }
   }
 
-  showDialog(){
+  showDialog() {
     return Get.defaultDialog(
         title: "Login Failed",
         titleStyle: TextStyle(
