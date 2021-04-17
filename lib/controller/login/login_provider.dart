@@ -34,10 +34,13 @@ class LoginProvider {
         _urlLogin,
         data: data,
       );
-      user = User.fromJson(response.data);
+      if(response.statusCode == 200) {
+        user = User.fromJson(response.data);
+      } else print('error');
     } on DioError catch (e) {
       print(e.error);
     }
     return user;
   }
+
 }

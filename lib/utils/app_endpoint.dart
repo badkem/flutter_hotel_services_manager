@@ -16,5 +16,6 @@ class AppEndpoint {
 
   static const String CHECK_ROOM_EXIST = 'room/check_room_exist';
   static const String LOGIN = 'users/login';
+  static const String CATEGORY = 'category/get_list_category';
   static const String LIST_FOOD = 'food/get_list_food';
 }
