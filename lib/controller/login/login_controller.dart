@@ -29,8 +29,7 @@ class LoginController extends GetxController {
           print(room.value.success);
           print(room.value.data);
         }
-      }
-      catch(e) {
+      } catch(e) {
         showDialog();
       }
       finally {
@@ -45,6 +44,7 @@ class LoginController extends GetxController {
       var userData = await LoginProvider().loginRequest(roomLabel, roomName);
       if (user != null) {
         user.value = userData;
+        print(user.value.data.user);
         print(user.value.data.user);
         SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.setString('user_token', user.value.data.token);

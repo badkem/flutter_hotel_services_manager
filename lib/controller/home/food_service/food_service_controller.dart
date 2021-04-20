@@ -8,6 +8,7 @@ class FoodServiceController extends GetxController with SingleGetTickerProviderM
   TabController tabController;
   var isLoading = true.obs;
   var foodList = <FoodDatum>[].obs;
+  var foodsByCat = <FoodDatum>[].obs;
   var listCategory = <CategoryDatum>[].obs;
   var listTabs = <Tab>[].obs;
 
@@ -38,6 +39,11 @@ class FoodServiceController extends GetxController with SingleGetTickerProviderM
       if(foodList != null){
         foodList.assignAll(foods);
         print(foodList);
+        // foodList.forEach((element) {
+        //   if(foodsByCat.where((item) => item.categoryId == element.categoryId).length == 0){
+        //     foodsByCat.add(element);
+        //   }
+        // });
       }
     } finally {
       isLoading(false);

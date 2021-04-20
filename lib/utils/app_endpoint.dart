@@ -18,4 +18,6 @@ class AppEndpoint {
   static const String LOGIN = 'users/login';
   static const String CATEGORY = 'category/get_list_category';
   static const String LIST_FOOD = 'food/get_list_food';
+  static const String LIST_LAUNDRY = 'laundry/get_list_laundry';
+  static const String CREATE_LAUNDRY_CART = 'room/create_laundry_cart';
 }
