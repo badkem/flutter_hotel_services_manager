@@ -1,14 +1,21 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:khoaluantotnghiep2021/controller/home/laundry/laundry_provider.dart';
 import 'package:khoaluantotnghiep2021/data/model/laundry.dart';
+import 'package:syncfusion_flutter_signaturepad/signaturepad.dart';
 
 class LaundryController extends GetxController with SingleGetTickerProviderMixin{
   var isLoading = true.obs;
   var isVisible = true.obs;
+  var isClearVisible = true.obs;
   var laundryList = <LaundryDatum>[].obs;
   var cart = <LaundryDatum>[].obs;
   var totalCount = 0.obs;
   var totalCartValue = 0.obs;
+  var currentColor = Colors.black.obs;
+
+  final GlobalKey<SfSignaturePadState> signatureGlobalKey = GlobalKey();
+
 
   void getLaundryList() async {
     try {
@@ -60,6 +67,13 @@ class LaundryController extends GetxController with SingleGetTickerProviderMixin
     cart.forEach((e) {
       totalCartValue += e.pricing * e.qty.value;
     });
+  }
+
+  void changeStrokeColor(Color color) => currentColor.value = color;
+
+  void clearSign() {
+    signatureGlobalKey.currentState.clear();
+    isClearVisible(true);
   }
 
   @override
