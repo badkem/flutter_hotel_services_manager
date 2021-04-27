@@ -1,7 +1,9 @@
 import 'dart:convert';
 
-class Food {
-  Food({
+import 'package:get/get.dart';
+
+class Laundry {
+  Laundry({
     this.success,
     this.data,
   });
@@ -9,11 +11,11 @@ class Food {
   bool success;
   Data data;
 
-  factory Food.fromRawJson(String str) => Food.fromJson(json.decode(str));
+  factory Laundry.fromRawJson(String str) => Laundry.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory Food.fromJson(Map<String, dynamic> json) => Food(
+  factory Laundry.fromJson(Map<String, dynamic> json) => Laundry(
         success: json["success"],
         data: Data.fromJson(json["data"]),
       );
@@ -33,7 +35,7 @@ class Data {
   });
 
   int page;
-  List<FoodDatum> data;
+  List<LaundryDatum> data;
   int totalPage;
   int count;
 
@@ -43,8 +45,7 @@ class Data {
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
         page: json["page"],
-        data: List<FoodDatum>.from(
-            json["data"].map((x) => FoodDatum.fromJson(x))),
+        data: List<LaundryDatum>.from(json["data"].map((x) => LaundryDatum.fromJson(x))),
         totalPage: json["totalPage"],
         count: json["count"],
       );
@@ -57,21 +58,16 @@ class Data {
       };
 }
 
-class FoodDatum {
-  FoodDatum({
+class LaundryDatum extends GetxController{
+  LaundryDatum({
     this.id,
     this.name,
     this.englishName,
     this.description,
     this.imagePath,
-    this.categoryId,
     this.pricing,
     this.currency,
-    this.foodUnit,
     this.isActive,
-    this.priority,
-    this.sku,
-    this.prefixCode,
   });
 
   int id;
@@ -79,34 +75,24 @@ class FoodDatum {
   String englishName;
   String description;
   String imagePath;
-  int categoryId;
   int pricing;
   int currency;
-  int foodUnit;
   int isActive;
-  int priority;
-  dynamic sku;
-  dynamic prefixCode;
+  var qty = 0.obs;
 
-  factory FoodDatum.fromRawJson(String str) =>
-      FoodDatum.fromJson(json.decode(str));
+  factory LaundryDatum.fromRawJson(String str) => LaundryDatum.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory FoodDatum.fromJson(Map<String, dynamic> json) => FoodDatum(
+  factory LaundryDatum.fromJson(Map<String, dynamic> json) => LaundryDatum(
         id: json["id"],
         name: json["name"],
         englishName: json["englishName"],
         description: json["description"],
         imagePath: json["imagePath"],
-        categoryId: json["categoryId"],
         pricing: json["pricing"],
         currency: json["currency"],
-        foodUnit: json["foodUnit"],
         isActive: json["isActive"],
-        priority: json["priority"],
-        sku: json["SKU"],
-        prefixCode: json["prefixCode"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -115,18 +101,13 @@ class FoodDatum {
         "englishName": englishName,
         "description": description,
         "imagePath": imagePath,
-        "categoryId": categoryId,
         "pricing": pricing,
         "currency": currency,
-        "foodUnit": foodUnit,
         "isActive": isActive,
-        "priority": priority,
-        "SKU": sku,
-        "prefixCode": prefixCode,
       };
 
   @override
   String toString() {
-    return 'Food: {id: $id, name: $name, englishName: $englishName, description: $description, imagePath: $imagePath, categoryId: $categoryId, pricing: $pricing, currency: $currency, foodUnit: $foodUnit, isActive: $isActive, priority: $priority, sku: $sku, prefixCode: $prefixCode}';
+    return 'Laundry: {id: $id, name: $name, englishName: $englishName, description: $description, imagePath: $imagePath, pricing: $pricing, currency: $currency, isActive: $isActive}';
   }
 }

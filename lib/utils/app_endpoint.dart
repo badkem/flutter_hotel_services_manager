@@ -15,6 +15,11 @@ class AppEndpoint {
   static const int ERROR_DISCONNECT = -1;
 
   static const String CHECK_ROOM_EXIST = 'room/check_room_exist';
+  static const String CREATE_LAUNDRY_CART = 'room/create_laundry_cart';
+  static const String ADD_LAUNDRY_TO_CART = 'room/request_laundry';
+  static const String UPLOAD_IMAGE = 'room/upload_base64';
   static const String LOGIN = 'users/login';
+  static const String CATEGORY = 'category/get_list_category';
   static const String LIST_FOOD = 'food/get_list_food';
+  static const String LIST_LAUNDRY = 'laundry/get_list_laundry';
 }

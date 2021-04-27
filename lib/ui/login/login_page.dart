@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:khoaluantotnghiep2021/controller/login/login_controller.dart';
 import 'package:khoaluantotnghiep2021/ui/theme/app_colors.dart';
 
+// ignore: must_be_immutable
 class LoginPage extends GetView<LoginController> {
   double height, width;
   @override

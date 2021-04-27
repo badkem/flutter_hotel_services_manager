@@ -1,55 +1,71 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+
 import 'package:khoaluantotnghiep2021/controller/home/food_service/food_service_controller.dart';
+import 'package:khoaluantotnghiep2021/data/model/food.dart';
 import 'package:khoaluantotnghiep2021/ui/theme/app_colors.dart';
 import 'package:khoaluantotnghiep2021/utils/app_endpoint.dart';
 
-class FoodService extends GetView<FoodServiceController> {
+class FoodServicePage extends GetView<FoodServiceController> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: 8),
-          child: DefaultTabController(
-            length: 5,
-            child: TabBar(
-              controller: controller.tabController,
-              isScrollable: true,
-              unselectedLabelColor: AppColors.primaryTextColor,
-              labelStyle: TextStyle(fontSize: 18),
-              indicatorSize: TabBarIndicatorSize.tab,
-              indicator: BoxDecoration(
-                  gradient: LinearGradient(colors: [
-                    AppColors.primaryAccentColor,
-                    AppColors.primaryColor
-                  ]),
-                  borderRadius: BorderRadius.circular(50),
-                  color: Colors.redAccent),
-              tabs: controller.serviceTabs,
+    return Obx(() {
+      if (controller.isLoading.value)
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      else
+        return Column(
+          children: [
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+              child: DefaultTabController(
+                length: controller.listTabs.length,
+                initialIndex: 0,
+                child: TabBar(
+                  overlayColor: MaterialStateProperty.all(Colors.transparent),
+                  controller: controller.tabController,
+                  tabs: controller.listTabs,
+                  isScrollable: true,
+                  unselectedLabelColor: AppColors.primaryTextColor,
+                  labelStyle: TextStyle(fontSize: 18),
+                  indicatorSize: TabBarIndicatorSize.tab,
+                  indicator: BoxDecoration(
+                      gradient: LinearGradient(colors: [
+                        AppColors.primaryAccentColor,
+                        AppColors.primaryColor
+                      ]),
+                      borderRadius: BorderRadius.circular(50),
+                      color: Colors.redAccent),
+                ),
+              ),
             ),
-          ),
-        ),
-        Expanded(
-          child: Container(
-            child: TabBarView(
-              controller: controller.tabController,
-              children: [
-                mustTry(),
-                mustTry(),
-                mustTry(),
-                mustTry(),
-                mustTry(),
-              ],
-            ),
-          ),
-        )
-      ],
-    );
+            Expanded(
+              child: Container(
+                child: TabBarView(
+                  controller: controller.tabController,
+                  children: List<Widget>.generate(controller.listTabs.length,
+                      (index) {
+                    return itemList();
+                  }),
+                  // children: controller.listCategory.map((element){
+                  //   return itemList();
+                  // }).toList(),
+                ),
+              ),
+            )
+          ],
+        );
+    });
   }
 
-  Widget mustTry() {
+  Widget itemList() {
+    var foods = <FoodDatum>[].obs;
+    var foodByCat = controller.foodList
+        .where((element) => element.categoryId == 6)
+        .toList();
+    foods.assignAll(foodByCat);
     return Obx(() {
       if (controller.isLoading.value)
         return Center(child: CircularProgressIndicator());
@@ -109,8 +125,8 @@ class FoodService extends GetView<FoodServiceController> {
                                   fontSize: 18),
                             ),
                             Text(
-                              NumberFormat.decimalPattern()
-                                  .format(controller.foodList[index].pricing) +
+                              NumberFormat.decimalPattern().format(
+                                      controller.foodList[index].pricing) +
                                   "₫",
                               style: TextStyle(
                                   color: Colors.red[700], fontSize: 18),

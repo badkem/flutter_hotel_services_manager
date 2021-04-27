@@ -2,6 +2,7 @@
     package="com.example.khoaluantotnghiep2021">
    <application
         android:label="khoaluantotnghiep2021"
+        android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
