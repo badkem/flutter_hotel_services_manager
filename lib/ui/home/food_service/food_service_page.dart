@@ -19,7 +19,7 @@ class FoodServicePage extends GetView<FoodServiceController> {
         return Column(
           children: [
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 8),
+              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
               child: DefaultTabController(
                 length: controller.listTabs.length,
                 initialIndex: 0,
