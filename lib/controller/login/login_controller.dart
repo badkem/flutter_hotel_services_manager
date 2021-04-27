@@ -25,6 +25,8 @@ class LoginController extends GetxController {
           room.value = roomData;
           login(label, roomName);
           guestName.value = room.value.data.customerName;
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          prefs.setInt('room_id', room.value.data.id);
           print(guestName);
           print(room.value.success);
           print(room.value.data);

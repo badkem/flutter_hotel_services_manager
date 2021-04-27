@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -32,10 +33,14 @@ class FoodServiceProvider {
   Future<List<FoodDatum>> fetchListFood() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     _token = prefs.getString('user_token');
-    Map<String, dynamic> query = {'isActive': '1'};
+    var query = jsonEncode({
+      'where': {
+        'isActive': 1,
+      }
+    });
     try {
       final response = await AppClients().post(_urlListFood,
-          queryParameters: query,
+          data: query,
           options: Options(
             headers: {HttpHeaders.authorizationHeader: 'Bearer $_token'},
           ));
