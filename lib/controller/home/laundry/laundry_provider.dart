@@ -104,18 +104,17 @@ class LaundryProvider {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     _token = prefs.getString('user_token');
     _roomId = prefs.getInt('room_id');
-    var data = {
-      'roomId': _roomId,
-      'cartId': cartId,
-      'laundryList': laundryItem.map((item) => {
-        'laundryId': item.id,
-        'laundryPricing': item.pricing,
-        'number': item.qty.value,
-        'status': 1,
-        'currency': item.currency,
-      }).toList(),
-    };
-    print(data);
+    var data = jsonEncode({
+          'roomId': _roomId,
+          'cartId': cartId,
+          'laundryList': laundryItem.map((item) => {
+            'laundryId': item.id,
+            'laundryPricing': item.pricing,
+            'number': item.qty.value,
+            'status': 1,
+            'currency': item.currency,
+          }).toList(),
+        });
     try {
       final response = await AppClients().post(_urlAddLaundryToCart,
           data: data,

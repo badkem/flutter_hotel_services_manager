@@ -13,73 +13,75 @@ class HomePage extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     LoginController l = Get.find();
-    return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 14),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Obx(() => Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text( 'Room: ' +
-                        l.textRoomName.text,
-                        style: TextStyle(
-                            fontSize: 20,
-                            color: AppColors.primaryTextColor),
-                      ),
-                      Text( 'GUEST NAME: ' +
-                        l.guestName.value,
-                        style: TextStyle(
-                            fontSize: 18, color: AppColors.primaryTextColor),
-                      ),
-                    ],
-                  )),
-                  Text(
-                    "History",
-                    style: TextStyle(
-                        fontSize: 18, color: AppColors.primaryTextColor),
-                  ),
-                ],
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        body: SafeArea(
+          child: Column(
+            children: [
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 14),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Obx(() => Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text( 'Room: ' +
+                          l.textRoomName.text,
+                          style: TextStyle(
+                              fontSize: 20,
+                              color: AppColors.primaryTextColor),
+                        ),
+                        Text( 'GUEST NAME: ' +
+                          l.guestName.value,
+                          style: TextStyle(
+                              fontSize: 18, color: AppColors.primaryTextColor),
+                        ),
+                      ],
+                    )),
+                    Text(
+                      "History",
+                      style: TextStyle(
+                          fontSize: 18, color: AppColors.primaryTextColor),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            SizedBox(height: 20),
-            Expanded(
-              child: PageView(
-                controller: controller.pageController,
-                physics: NeverScrollableScrollPhysics(),
-                children: [
-                  FoodServicePage(),
-                  LaundryPage(),
-                  Text("Ok"),
-                  Text("Ok"),
-                  Text("Ok"),
-                ],
+              SizedBox(height: 20),
+              Expanded(
+                child: PageView(
+                  controller: controller.pageController,
+                  physics: NeverScrollableScrollPhysics(),
+                  children: [
+                    FoodServicePage(),
+                    LaundryPage(),
+                    Text("Ok"),
+                    Text("Ok"),
+                    Text("Ok"),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-      bottomNavigationBar: ValueBuilder<int>(
-        initialValue: 0,
-        builder: (value, updateFn) => Container(
-          color: AppColors.bottomBarColor,
-          child: BubbleBottomBar(
-            backgroundColor: AppColors.bottomBarColor,
-            opacity: .2,
-            currentIndex: value,
-            onTap: (tab) {
-              controller.pageController.animateToPage(tab,
-                  duration: controller.animationDuration, curve: Curves.ease);
-              updateFn(tab);
-            },
-            elevation: 8.0,
-            hasInk: true,
-            inkColor: Colors.green,
-            items: controller.navigationItems,
+        bottomNavigationBar: ValueBuilder<int>(
+          initialValue: 0,
+          builder: (value, updateFn) => Container(
+            color: AppColors.bottomBarColor,
+            child: BubbleBottomBar(
+              backgroundColor: AppColors.bottomBarColor,
+              opacity: .2,
+              currentIndex: value,
+              onTap: (tab) {
+                controller.pageController.jumpToPage(tab);
+                updateFn(tab);
+              },
+              elevation: 8.0,
+              hasInk: true,
+              inkColor: Colors.white,
+              items: controller.navigationItems,
+            ),
           ),
         ),
       ),
