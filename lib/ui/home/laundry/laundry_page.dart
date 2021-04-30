@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:badges/badges.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:khoaluantotnghiep2021/controller/home/laundry/laundry_controller.dart';
@@ -125,6 +127,7 @@ class LaundryPage extends GetView<LaundryController> {
                               controller.increaseCount(index);
                               controller.addItem(controller.laundryList[index]);
                               controller.calculateTotal();
+                              print(controller.laundryCartItem);
                             },
                             child: Icon(
                               Icons.add,
@@ -177,149 +180,210 @@ class LaundryPage extends GetView<LaundryController> {
         builder: (context){
       return ModalFit(
         child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Laundry Detail",
-                      style: TextStyle(
-                        fontSize: 24,
-                        color: AppColors.primaryTextColor,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    Text(
-                      NumberFormat.decimalPattern()
-                          .format(controller.totalCartValue) +
-                          "₫",
-                      style: TextStyle(
-                        fontSize: 23,
-                        color: AppColors.primaryTextColor,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: height * 0.02,
-              ),
-              Container(
-                child: ListView.builder(
-                    primary: true,
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: controller.laundryCartItem.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        leading: Image.network(
-                          '${AppEndpoint.BASE_URL_IMAGE}' +
-                              controller.laundryCartItem[index].imagePath,
-                          fit: BoxFit.cover,
-                          width: 70,
-                        ),
-                        title: Text(
-                          controller.laundryCartItem[index].name,
-                          overflow: TextOverflow.ellipsis,
+          child: Obx(()
+          => Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Laundry Detail",
                           style: TextStyle(
-                            fontSize: 20,
+                            fontSize: 24,
                             color: AppColors.primaryTextColor,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
-                        subtitle: RichText(
-                          text: TextSpan(
-                            style: DefaultTextStyle.of(context).style,
-                            children: <TextSpan>[
-                              TextSpan(
-                                  text: 'x',
-                                  style: TextStyle(
-                                    fontSize: 17,
-                                    color: AppColors.primaryTextColor,
-                                  )),
-                              TextSpan(
-                                  text:
-                                  '${controller.laundryCartItem[index].qty}',
-                                  style: TextStyle(
-                                    fontSize: 23,
-                                    color: AppColors.primaryTextColor,
-                                  )),
-                            ],
-                          ),
-                        ),
-                        trailing: Text(
-                          NumberFormat.decimalPattern().format(
-                              controller.laundryCartItem[index].pricing) +
+                        Obx(() => Text(
+                          NumberFormat.decimalPattern()
+                              .format(controller.totalCartValue) +
                               "₫",
                           style: TextStyle(
-                            fontSize: 20,
+                            fontSize: 23,
                             color: AppColors.primaryTextColor,
                           ),
-                        ),
-                      );
-                    }),
-              ),
-              Container(
-                padding: EdgeInsets.all(8.0),
-                child: Column(
-                  children: <Widget>[
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "Note",
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: AppColors.primaryTextColor,
-                          fontWeight: FontWeight.w500
-                        ),
-                      ),
+                        )),
+                      ],
                     ),
-                    TextField(
-                      controller: controller.textNote,
-                      autofocus: false,
-                      onChanged: (value) => controller.note = value,
-                      style: TextStyle(
-                          fontSize: 20,
-                          color: AppColors.primaryTextColor),
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.white,
-                        hintText: 'Add note for this cart',
-                        hintStyle: TextStyle(
-                          color: Colors.black38
-                        ),
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                              width: 1.5, color: Colors.black45),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: height * 0.03),
-              Container(
-                height: height * 0.07,
-                width: width * 0.5,
-                child: TextButton(
-                  child: Text('PROCESS ORDER'),
-                  style: TextButton.styleFrom(
-                    textStyle: TextStyle(
-                      fontSize: 18,
-                    ),
-                    primary: Colors.white,
-                    backgroundColor: AppColors.primaryColor,
                   ),
-                  onPressed: () {
-                    Get.back();
-                    signatureDialog(context);
-                  },
-                ),
+                  SizedBox(
+                    height: height * 0.02,
+                  ),
+                  Container(
+                    child: ListView.builder(
+                        primary: true,
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: controller.laundryCartItem.length,
+                        itemBuilder: (context, index) {
+                          return Slidable(
+                            key: UniqueKey(),
+                            actionPane: SlidableDrawerActionPane(),
+                            secondaryActions: <Widget>[
+                              IconSlideAction(
+                                caption: 'Edit',
+                                onTap: () => Get.defaultDialog(
+                                  barrierDismissible: false,
+                                  title: 'Quantity',
+                                  content: Container(
+                                      width: width * 0.3,
+                                      child: TextField(
+                                        controller: controller.editQty,
+                                        keyboardType: TextInputType.number,
+                                        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                                        autofocus: false,
+                                        onChanged: (value) => controller.qty = value,
+                                      )),
+                                  confirm: TextButton(
+                                    child: Text('Okay'),
+                                    style: TextButton.styleFrom(
+                                      textStyle: TextStyle(
+                                        fontSize: 12,
+                                      ),
+                                      primary: Colors.white,
+                                      backgroundColor: AppColors.primaryColor,
+                                    ),
+                                    onPressed: () {
+                                      controller.onEditQtyItem(controller.laundryCartItem[index]);
+                                      controller.editQty.clear();
+                                    },
+                                  ),
+                                ),
+                                color: Colors.grey.shade300,
+                                icon: Icons.more_horiz_rounded,
+                              ),
+                              IconSlideAction(
+                                caption: 'Delete',
+                                onTap: () {
+                                  controller.onDeleteItemCart(
+                                    controller.laundryCartItem[index],
+                                    controller.laundryCartItem[index].qty.value = 0);
+                                  controller.calculateTotal();
+                                },
+                                color: Colors.red,
+                                icon: Icons.delete,
+                              ),
+                            ],
+                            dismissal: SlidableDismissal(
+                              onDismissed: (actionType) {
+                                controller.onDeleteItemCart(
+                                  controller.laundryCartItem[index],
+                                  controller.laundryCartItem[index].qty.value = 0,
+                                );
+                                controller.calculateTotal();
+                              },
+                              child: SlidableDrawerDismissal(),
+                            ),
+                            child: ListTile(
+                              leading: Image.network(
+                                '${AppEndpoint.BASE_URL_IMAGE}' +
+                                    controller.laundryCartItem[index].imagePath,
+                                fit: BoxFit.cover,
+                                width: 70,
+                              ),
+                              title: Text(
+                                controller.laundryCartItem[index].name,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: AppColors.primaryTextColor,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              subtitle: Obx(() => RichText(
+                                text: TextSpan(
+                                  style: DefaultTextStyle.of(context).style,
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                        text: 'x',
+                                        style: TextStyle(
+                                          fontSize: 17,
+                                          color: AppColors.primaryTextColor,
+                                        )),
+                                    TextSpan(
+                                        text:
+                                        '${controller.laundryCartItem[index].qty}',
+                                        style: TextStyle(
+                                          fontSize: 23,
+                                          color: AppColors.primaryTextColor,
+                                        )),
+                                  ],
+                                ),
+                              )),
+                              trailing: Text(
+                                NumberFormat.decimalPattern().format(
+                                    controller.laundryCartItem[index].pricing) +
+                                    "₫",
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: AppColors.primaryTextColor,
+                                ),
+                              ),
+                            ),
+                          );
+                        }),
+                  ),
+                  Container(
+                    padding: EdgeInsets.all(8.0),
+                    child: Column(
+                      children: <Widget>[
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Note",
+                            style: TextStyle(
+                                fontSize: 20,
+                                color: AppColors.primaryTextColor,
+                                fontWeight: FontWeight.w500
+                            ),
+                          ),
+                        ),
+                        TextField(
+                          controller: controller.textNote,
+                          autofocus: false,
+                          onChanged: (value) => controller.note = value,
+                          style: TextStyle(
+                              fontSize: 20,
+                              color: AppColors.primaryTextColor),
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: Colors.white,
+                            hintText: 'Add note for this cart',
+                            hintStyle: TextStyle(
+                                color: Colors.black38
+                            ),
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                  width: 1.5, color: Colors.black45),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: height * 0.03),
+                  Container(
+                    height: height * 0.07,
+                    width: width * 0.5,
+                    child: TextButton(
+                      child: Text('PROCESS ORDER'),
+                      style: TextButton.styleFrom(
+                        textStyle: TextStyle(
+                          fontSize: 18,
+                        ),
+                        primary: Colors.white,
+                        backgroundColor: AppColors.primaryColor,
+                      ),
+                      onPressed: () {
+                        Get.back();
+                        signatureDialog(context);
+                      },
+                    ),
+                  )
+                ],
               )
-            ],
           ),
         )
       );

@@ -14,8 +14,9 @@ import 'package:syncfusion_flutter_signaturepad/signaturepad.dart';
 
 class FoodServiceController extends GetxController with SingleGetTickerProviderMixin {
   TabController tabController;
-  TextEditingController textNote;
+  TextEditingController textNote, editQty;
   var note = '';
+  var qty = '';
 
   var isCategoryLoading = true.obs;
   var isLoading = true.obs;
@@ -59,6 +60,16 @@ class FoodServiceController extends GetxController with SingleGetTickerProviderM
     var foods = await FoodServiceProvider().fetchListFood();
     if (foodList != null) {
       foodList.assignAll(foods);
+      if(foodCartItem.isNotEmpty){
+        for(int i = 0; i < foodList.length; i++){
+          for(int j = 0; j < foodCartItem.length; j++){
+            if(foodList[i].id == foodCartItem[j].id){
+              foodList[i].qty = foodCartItem[j].qty;
+              print('${foodList[i].name}: ' + '${foodList[i].qty}');
+            }
+          }
+        }
+      }
       foodList.removeWhere((element) => element.priority == 0);
       if(allPromo.value.data.listPromo.data.isNotEmpty){
         for(int x = 0; x < foodList.length; x++){
@@ -78,6 +89,16 @@ class FoodServiceController extends GetxController with SingleGetTickerProviderM
     var foods = await FoodServiceProvider().fetchListFoodByCat(id);
     if (foodList != null) {
       foodList.assignAll(foods);
+      if(foodCartItem.isNotEmpty){
+        for(int i = 0; i < foodList.length; i++){
+          for(int j = 0; j < foodCartItem.length; j++){
+            if(foodList[i].id == foodCartItem[j].id){
+              foodList[i].qty = foodCartItem[j].qty;
+              print('${foodList[i].name}: ' + '${foodList[i].qty}');
+            }
+          }
+        }
+      }
       if(allPromo.value.data.listPromo.data.isNotEmpty){
         for(int x = 0; x < foodList.length; x++){
           for(int i = 0; i < allPromo.value.data.listPromoFood.data.length; i++) {
@@ -102,6 +123,16 @@ class FoodServiceController extends GetxController with SingleGetTickerProviderM
   void getPromoList() async {
     var foods = await FoodServiceProvider().fetchListFood();
     foodList.assignAll(foods);
+    if(foodCartItem.isNotEmpty){
+      for(int i = 0; i < foodList.length; i++){
+        for(int j = 0; j < foodCartItem.length; j++){
+          if(foodList[i].id == foodCartItem[j].id){
+            foodList[i].qty = foodCartItem[j].qty;
+            print('${foodList[i].name}: ' + '${foodList[i].qty}');
+          }
+        }
+      }
+    }
     if(allPromo.value.data.listPromo.data.isNotEmpty){
       for(int x = 0; x < foodList.length; x++){
         for(int i = 0; i < allPromo.value.data.listPromoFood.data.length; i++) {
@@ -150,8 +181,32 @@ class FoodServiceController extends GetxController with SingleGetTickerProviderM
   void calculateTotal() {
     totalCartValue = 0.obs;
     foodCartItem.forEach((e) {
+      if(e.discount.value > 0){
+        totalCartValue += e.discount * e.qty.value;
+      } else
       totalCartValue += e.pricing * e.qty.value;
     });
+  }
+
+  void onDeleteItemCart(foodCart, qty) {
+    foodCartItem.removeWhere((item) => item.id == foodCart.id);
+    int count = foodCartItem.map((e) => e.qty.value).fold(0, (prev, qty) => prev + qty);
+    totalCount.value = count;
+    calculateTotal();
+  }
+
+  void onEditQtyItem(foodCart) {
+    foodCart.qty.value = (int.tryParse(qty));
+    if(foodCart.qty == 0) {
+      foodCartItem.removeWhere((item) => item.id == foodCart.id);
+    }
+    int count = foodCartItem.map((e) => e.qty.value).fold(0, (prev, qty) => prev + qty);
+    totalCount.value = count;
+    totalCartValue.value = 0;
+    foodCartItem.forEach((e) {
+      totalCartValue += e.pricing * e.qty.value;
+    });
+    Get.back();
   }
 
   //signature
@@ -223,32 +278,36 @@ class FoodServiceController extends GetxController with SingleGetTickerProviderM
             )
         );
         clearBooking();
+        print('Send success: ' + '${cartResult.value.success}');
       }
-      else Get.defaultDialog(
-          title: "Error!",
-          titleStyle: TextStyle(
-            color: AppColors.primaryTextColor,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-          content: Column(
-            children: [
-              Text("Cannot booking this time"),
-              SizedBox(height: 10),
-              TextButton(
-                child: Text('Okay'),
-                style: TextButton.styleFrom(
-                  textStyle: TextStyle(
-                    fontSize: 12,
+      else {
+        Get.defaultDialog(
+            title: "Error!",
+            titleStyle: TextStyle(
+              color: AppColors.primaryTextColor,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+            content: Column(
+              children: [
+                Text("Cannot booking this time"),
+                SizedBox(height: 10),
+                TextButton(
+                  child: Text('Okay'),
+                  style: TextButton.styleFrom(
+                    textStyle: TextStyle(
+                      fontSize: 12,
+                    ),
+                    primary: Colors.white,
+                    backgroundColor: AppColors.primaryColor,
                   ),
-                  primary: Colors.white,
-                  backgroundColor: AppColors.primaryColor,
+                  onPressed: () => Get.back(),
                 ),
-                onPressed: () => Get.back(),
-              ),
-            ],
-          )
-      );
+              ],
+            )
+        );
+        print('Send success: ' + '${cartResult.value.success}');
+      }
     } finally {
       isLoading(false);
     }
@@ -258,6 +317,7 @@ class FoodServiceController extends GetxController with SingleGetTickerProviderM
     foodCartItem.clear();
     foodList.forEach((element) => element.qty.value = 0);
     totalCount.value = 0;
+    textNote.clear();
     isVisible(true);
   }
 
@@ -265,6 +325,7 @@ class FoodServiceController extends GetxController with SingleGetTickerProviderM
   void onInit() {
     getCategories();
     getAllPromo();
+    editQty = new TextEditingController();
     textNote = new TextEditingController();
     super.onInit();
   }
@@ -272,6 +333,7 @@ class FoodServiceController extends GetxController with SingleGetTickerProviderM
   @override
   void onClose() {
     tabController.dispose();
+    editQty.dispose();
     textNote.dispose();
     Get.delete();
     super.onClose();

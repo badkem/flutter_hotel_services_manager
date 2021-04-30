@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:badges/badges.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
@@ -251,7 +253,7 @@ class FoodServicePage extends GetView<FoodServiceController> {
         builder: (context){
           return ModalFit(
               child: SingleChildScrollView(
-                child: Column(
+                child: Obx(() => Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     Container(
@@ -266,7 +268,7 @@ class FoodServicePage extends GetView<FoodServiceController> {
                               fontWeight: FontWeight.w500,
                             ),
                           ),
-                          Text(
+                          Obx(() => Text(
                             NumberFormat.decimalPattern()
                                 .format(controller.totalCartValue) +
                                 "₫",
@@ -274,7 +276,7 @@ class FoodServicePage extends GetView<FoodServiceController> {
                               fontSize: 23,
                               color: AppColors.primaryTextColor,
                             ),
-                          ),
+                          )),
                         ],
                       ),
                     ),
@@ -288,52 +290,134 @@ class FoodServicePage extends GetView<FoodServiceController> {
                           physics: NeverScrollableScrollPhysics(),
                           itemCount: controller.foodCartItem.length,
                           itemBuilder: (context, index) {
-                            return ListTile(
-                              leading: Image.network(
-                                '${AppEndpoint.BASE_URL_IMAGE}' +
-                                    controller.foodCartItem[index].imagePath,
-                                fit: BoxFit.cover,
-                                width: 70,
-                              ),
-                              title: Text(
-                                controller.foodCartItem[index].name,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  color: AppColors.primaryTextColor,
-                                  fontWeight: FontWeight.w500,
+                            return Slidable(
+                              key: UniqueKey(),
+                              actionPane: SlidableDrawerActionPane(),
+                              secondaryActions: <Widget>[
+                                IconSlideAction(
+                                  caption: 'Edit',
+                                  onTap: () => Get.defaultDialog(
+                                    barrierDismissible: false,
+                                    title: 'Quantity',
+                                    content: Container(
+                                        width: width * 0.3,
+                                        child: TextField(
+                                          controller: controller.editQty,
+                                          keyboardType: TextInputType.number,
+                                          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                                          autofocus: false,
+                                          onChanged: (value) => controller.qty = value,
+                                        )),
+                                    confirm: TextButton(
+                                      child: Text('Okay'),
+                                      style: TextButton.styleFrom(
+                                        textStyle: TextStyle(
+                                          fontSize: 12,
+                                        ),
+                                        primary: Colors.white,
+                                        backgroundColor: AppColors.primaryColor,
+                                      ),
+                                      onPressed: () {
+                                        controller.onEditQtyItem(controller.foodCartItem[index]);
+                                        controller.editQty.clear();
+                                      },
+                                    ),
+                                  ),
+                                  color: Colors.grey.shade300,
+                                  icon: Icons.more_horiz_rounded,
                                 ),
+                                IconSlideAction(
+                                  caption: 'Delete',
+                                  onTap: () {
+                                    controller.onDeleteItemCart(
+                                        controller.foodCartItem[index],
+                                        controller.foodCartItem[index].qty.value = 0);
+                                    controller.calculateTotal();
+                                  },
+                                  color: Colors.red,
+                                  icon: Icons.delete,
+                                ),
+                              ],
+                              dismissal: SlidableDismissal(
+                                onDismissed: (actionType) {
+                                  controller.onDeleteItemCart(
+                                    controller.foodCartItem[index],
+                                    controller.foodCartItem[index].qty.value = 0,
+                                  );
+                                  controller.calculateTotal();
+                                },
+                                child: SlidableDrawerDismissal(),
                               ),
-                              subtitle: RichText(
-                                text: TextSpan(
-                                  style: DefaultTextStyle.of(context).style,
-                                  children: <TextSpan>[
-                                    TextSpan(
-                                        text: 'x',
-                                        style: TextStyle(
-                                          fontSize: 17,
-                                          color: AppColors.primaryTextColor,
-                                        )),
-                                    TextSpan(
-                                        text:
-                                        '${controller.foodCartItem[index].qty}',
-                                        style: TextStyle(
-                                          fontSize: 23,
-                                          color: AppColors.primaryTextColor,
-                                        )),
+                              child: ListTile(
+                                leading: Image.network(
+                                  '${AppEndpoint.BASE_URL_IMAGE}' +
+                                      controller.foodCartItem[index].imagePath,
+                                  fit: BoxFit.cover,
+                                  width: 70,
+                                ),
+                                title: Text(
+                                  controller.foodCartItem[index].name,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    color: AppColors.primaryTextColor,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                subtitle: Obx(() => RichText(
+                                  text: TextSpan(
+                                    style: DefaultTextStyle.of(context).style,
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                          text: 'x',
+                                          style: TextStyle(
+                                            fontSize: 17,
+                                            color: AppColors.primaryTextColor,
+                                          )),
+                                      TextSpan(
+                                          text:
+                                          '${controller.foodCartItem[index].qty}',
+                                          style: TextStyle(
+                                            fontSize: 23,
+                                            color: AppColors.primaryTextColor,
+                                          )),
+                                    ],
+                                  ),
+                                )),
+                                trailing: controller.foodCartItem[index].discount.value == 0 ?
+                                Text(
+                                  NumberFormat.decimalPattern().format(
+                                      controller.foodCartItem[index].pricing) +
+                                      "₫",
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    color: AppColors.primaryTextColor,
+                                  ),
+                                ) :
+                                Column(
+                                  children: [
+                                    Text(
+                                      NumberFormat.decimalPattern().format(
+                                          controller.foodCartItem[index].pricing) +
+                                          "₫",
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        decoration: TextDecoration.lineThrough,
+                                        color: AppColors.primaryTextColor,
+                                      ),
+                                    ),
+                                    Text(
+                                      NumberFormat.decimalPattern().format(
+                                          controller.foodCartItem[index].discount) +
+                                          "₫",
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        color: AppColors.primaryTextColor,
+                                      ),
+                                    ),
                                   ],
-                                ),
-                              ),
-                              trailing: Text(
-                                NumberFormat.decimalPattern().format(
-                                    controller.foodCartItem[index].pricing) +
-                                    "₫",
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  color: AppColors.primaryTextColor,
-                                ),
-                              ),
-                            );
+                                )
+                            ),);
                           }),
                     ),
                     Container(
@@ -394,7 +478,7 @@ class FoodServicePage extends GetView<FoodServiceController> {
                       ),
                     )
                   ],
-                ),
+                )),
               )
           );
         });

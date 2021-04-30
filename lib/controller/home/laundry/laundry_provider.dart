@@ -16,8 +16,10 @@ class LaundryProvider {
   Photo photo;
   Cart laundryCart;
   CartResult cartResult;
+
   String _token;
   int _roomId;
+
   String _urlListLaundry = AppEndpoint.LIST_LAUNDRY;
   String _urlCreateLaundryCart = AppEndpoint.CREATE_LAUNDRY_CART;
   String _urlUpload = AppEndpoint.UPLOAD_IMAGE;

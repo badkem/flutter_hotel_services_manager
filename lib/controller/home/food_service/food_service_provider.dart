@@ -20,8 +20,10 @@ class FoodServiceProvider {
   Photo photo;
   Cart foodCart;
   CartResult cartResult;
+
   String _token;
   int _roomId;
+
   String _urlListFood = AppEndpoint.LIST_FOOD;
   String _urlListCategory = AppEndpoint.CATEGORY;
   String _urlAllPromo = AppEndpoint.ALL_PROMOTION;
@@ -37,7 +39,6 @@ class FoodServiceProvider {
           options: Options(
             headers: {
               HttpHeaders.authorizationHeader: 'Bearer $_token',
-              HttpHeaders.connectionHeader: 'Keep-Alive'
             },
           ));
       category = Category.fromJson(response.data);
@@ -61,7 +62,6 @@ class FoodServiceProvider {
           options: Options(
             headers: {
               HttpHeaders.authorizationHeader: 'Bearer $_token',
-              HttpHeaders.connectionHeader: 'Keep-Alive'
             },
           ));
       food = Food.fromJson(response.data);
@@ -83,7 +83,6 @@ class FoodServiceProvider {
           options: Options(
             headers: {
               HttpHeaders.authorizationHeader: 'Bearer $_token',
-              HttpHeaders.connectionHeader: 'Keep-Alive'
             },
           ));
       food = Food.fromJson(response.data);
@@ -103,7 +102,6 @@ class FoodServiceProvider {
           options: Options(
             headers: {
               HttpHeaders.authorizationHeader: 'Bearer $_token',
-              HttpHeaders.connectionHeader: 'Keep-Alive',
             },
           ));
       promo = Promo.fromJson(response.data);
@@ -170,18 +168,17 @@ class FoodServiceProvider {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     _token = prefs.getString('user_token');
     _roomId = prefs.getInt('room_id');
-    var data = {
+    var data = jsonEncode({
       'roomId': _roomId,
       'cartId': cartId,
-      'laundryList': foodItem.map((item) => {
-        'laundryId': item.id,
-        'laundryPricing': item.pricing,
+      'foodList': foodItem.map((item) => {
+        'foodId': item.id,
+        'foodPricing': item.pricing,
         'number': item.qty.value,
         'status': 1,
         'currency': item.currency,
       }).toList(),
-    };
-    print(data);
+    });
     try {
       final response = await AppClients().post(_urlAddFoodToCart,
           data: data,
