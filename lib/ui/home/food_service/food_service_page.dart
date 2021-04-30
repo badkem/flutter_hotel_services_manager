@@ -324,7 +324,6 @@ class FoodServicePage extends GetView<FoodServiceController> {
                                     ),
                                   ),
                                   color: Colors.grey.shade300,
-                                  icon: Icons.more_horiz_rounded,
                                 ),
                                 IconSlideAction(
                                   caption: 'Delete',
@@ -335,7 +334,6 @@ class FoodServicePage extends GetView<FoodServiceController> {
                                     controller.calculateTotal();
                                   },
                                   color: Colors.red,
-                                  icon: Icons.delete,
                                 ),
                               ],
                               dismissal: SlidableDismissal(
@@ -435,23 +433,27 @@ class FoodServicePage extends GetView<FoodServiceController> {
                               ),
                             ),
                           ),
-                          TextField(
-                            controller: controller.textNote,
-                            autofocus: false,
-                            onChanged: (value) => controller.note = value,
-                            style: TextStyle(
-                                fontSize: 20,
-                                color: AppColors.primaryTextColor),
-                            decoration: InputDecoration(
-                              filled: true,
-                              fillColor: Colors.white,
-                              hintText: 'Add note for this cart',
-                              hintStyle: TextStyle(
-                                  color: Colors.black38
-                              ),
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                    width: 1.5, color: Colors.black45),
+                          Padding(
+                              padding: EdgeInsets.only(
+                                bottom: MediaQuery.of(context).viewInsets.bottom),
+                            child: TextField(
+                              controller: controller.textNote,
+                              autofocus: false,
+                              onChanged: (value) => controller.note = value,
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  color: AppColors.primaryTextColor),
+                              decoration: InputDecoration(
+                                filled: true,
+                                fillColor: Colors.white,
+                                hintText: 'Add note for this cart',
+                                hintStyle: TextStyle(
+                                    color: Colors.black38
+                                ),
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      width: 1.5, color: Colors.black45),
+                                ),
                               ),
                             ),
                           ),
