@@ -192,6 +192,7 @@ class FoodServiceController extends GetxController with SingleGetTickerProviderM
     foodCartItem.removeWhere((item) => item.id == foodCart.id);
     int count = foodCartItem.map((e) => e.qty.value).fold(0, (prev, qty) => prev + qty);
     totalCount.value = count;
+    if(totalCount.value <= 0) isVisible(true);
     calculateTotal();
   }
 
@@ -202,6 +203,7 @@ class FoodServiceController extends GetxController with SingleGetTickerProviderM
     }
     int count = foodCartItem.map((e) => e.qty.value).fold(0, (prev, qty) => prev + qty);
     totalCount.value = count;
+    if(totalCount.value <= 0) isVisible(true);
     totalCartValue.value = 0;
     foodCartItem.forEach((e) {
       totalCartValue += e.pricing * e.qty.value;

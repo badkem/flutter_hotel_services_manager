@@ -5,7 +5,6 @@ import 'package:khoaluantotnghiep2021/services/navigation_service.dart';
 
 class HomeController extends GetxController {
   final pageController = PageController();
-  final animationDuration = const Duration(milliseconds: 350);
   List<BubbleBottomBarItem> navigationItems;
 
   @override

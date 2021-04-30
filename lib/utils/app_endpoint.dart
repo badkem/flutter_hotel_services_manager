@@ -20,6 +20,7 @@ class AppEndpoint {
   static const String ADD_FOOD_TO_CART = 'room/add_food_to_cart';
   static const String ADD_LAUNDRY_TO_CART = 'room/request_laundry';
   static const String UPLOAD_IMAGE = 'room/upload_base64';
+  static const String GET_LIST_CART = 'room/get_all_cart_of_room';
   static const String LOGIN = 'users/login';
   static const String CATEGORY = 'category/get_list_category';
   static const String ALL_PROMOTION = 'promo/get_all_promo';

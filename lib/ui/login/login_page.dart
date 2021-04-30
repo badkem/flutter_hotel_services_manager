@@ -33,7 +33,7 @@ class LoginPage extends GetView<LoginController> {
               child: Column(
                 children: [
                   Image.asset(
-                    'assets/images/ic_logo_app_foreground.png',
+                    'assets/images/ic_logo_app.png',
                     height: 140,),
                   SizedBox(height: height * 0.05),
                   TextField(

@@ -1,18 +1,25 @@
 import 'package:bubble_bottom_bar/bubble_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:khoaluantotnghiep2021/controller/home/history/history_controller.dart';
 
 import 'package:khoaluantotnghiep2021/controller/home/home_controller.dart';
 import 'package:khoaluantotnghiep2021/controller/login/login_controller.dart';
+import 'package:khoaluantotnghiep2021/ui/home/history/history_page.dart';
 import 'package:khoaluantotnghiep2021/ui/theme/app_colors.dart';
 
 import 'package:khoaluantotnghiep2021/ui/home/laundry/laundry_page.dart';
 import 'food_service/food_service_page.dart';
 
+// ignore: must_be_immutable
 class HomePage extends GetView<HomeController> {
+  double height, width;
   @override
   Widget build(BuildContext context) {
     LoginController l = Get.find();
+    HistoryController hc = Get.find();
+    height = MediaQuery.of(context).size.height;
+    width = MediaQuery.of(context).size.width;
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
@@ -40,11 +47,18 @@ class HomePage extends GetView<HomeController> {
                         ),
                       ],
                     )),
-                    Text(
-                      "History",
-                      style: TextStyle(
-                          fontSize: 18, color: AppColors.primaryTextColor),
-                    ),
+                    InkWell(
+                      splashColor: Colors.grey.shade200,
+                      onTap: () {
+                        controller.pageController.jumpToPage(5);
+                        hc.getCarts();
+                      },
+                      child: Text(
+                        "History",
+                        style: TextStyle(
+                            fontSize: 18, color: AppColors.primaryTextColor),
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -59,9 +73,10 @@ class HomePage extends GetView<HomeController> {
                     Text("Ok"),
                     Text("Ok"),
                     Text("Ok"),
+                    HistoryPage(),
                   ],
                 ),
-              ),
+              )
             ],
           ),
         ),
