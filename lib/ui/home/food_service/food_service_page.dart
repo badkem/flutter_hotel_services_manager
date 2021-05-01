@@ -295,6 +295,7 @@ class FoodServicePage extends GetView<FoodServiceController> {
                               actionPane: SlidableDrawerActionPane(),
                               secondaryActions: <Widget>[
                                 IconSlideAction(
+                                  iconWidget: Icon(Icons.more_horiz),
                                   caption: 'Edit',
                                   onTap: () => Get.defaultDialog(
                                     barrierDismissible: false,
@@ -326,6 +327,7 @@ class FoodServicePage extends GetView<FoodServiceController> {
                                   color: Colors.grey.shade300,
                                 ),
                                 IconSlideAction(
+                                  iconWidget: Icon(Icons.delete, color: AppColors.iconColor,),
                                   caption: 'Delete',
                                   onTap: () {
                                     controller.onDeleteItemCart(
@@ -487,128 +489,135 @@ class FoodServicePage extends GetView<FoodServiceController> {
   }
 
   signatureDialog(BuildContext context) {
-    if(Platform.isIOS)
-      showDialog(
-          context: context,
-          builder: (context){
-            return CupertinoAlertDialog(
-              insetAnimationDuration: Duration(milliseconds: 400),
-              title: Text(
-                'please sign to confirm'.toUpperCase(),
-                style: TextStyle(
-                  color: AppColors.primaryTextColor,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              content: Obx(() =>
-                  Column(
-                    children: [
-                      SizedBox(
-                        height: height * 0.02,),
-                      Container(
-                        height: height * 0.35,
-                        child: Stack(
-                          children: [
-                            SfSignaturePad(
-                                onSignStart: () => controller.isClearVisible(false),
-                                key: controller.signatureGlobalKey,
-                                backgroundColor: Colors.white,
-                                strokeColor: controller.currentColor.value,
-                                minimumStrokeWidth: 2.0,
-                                maximumStrokeWidth: 3.0),
-                            !controller.isClearVisible.value ? Align(
-                              alignment: Alignment.bottomCenter,
-                              child: GestureDetector(
-                                onTap: () => controller.clearSign(),
-                                child: Icon(
-                                  Icons.cancel,
-                                  color: Colors.black26,
-                                  size: 35,),
-                              ),
-                            ) : Container(),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: height * 0.02,),
-                      Container(
-                        height: height * 0.05,
-                        width: width * 1,
-                        child: ListView(
-                          scrollDirection: Axis.horizontal,
-                          children: [
-                            Icon(Icons.palette_outlined, color: controller.currentColor.value, size: 35,),
-                            GestureDetector(
-                              onTap: () => controller.changeStrokeColor(Colors.black),
-                              child: DotWidget(
-                                size: 16,
-                                color: Colors.black,
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () => controller.changeStrokeColor(Colors.blueAccent),
-                              child: DotWidget(
-                                size: 16,
-                                color: Colors.blueAccent,
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () => controller.changeStrokeColor(Colors.lightGreenAccent),
-                              child: DotWidget(
-                                size: 16,
-                                color: Colors.lightGreenAccent,
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () => controller.changeStrokeColor(Colors.orangeAccent),
-                              child: DotWidget(
-                                size: 16,
-                                color: Colors.orangeAccent,
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () => controller.changeStrokeColor(Colors.redAccent),
-                              child: DotWidget(
-                                size: 16,
-                                color: Colors.redAccent,
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () => controller.changeStrokeColor(Colors.purpleAccent),
-                              child: DotWidget(
-                                size: 16,
-                                color: Colors.purpleAccent,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  )
-              ),
-              actions: [
-                Container(
-                  height: height * 0.05,
-                  child: TextButton(
-                    child: Text('ORDER'),
-                    style: TextButton.styleFrom(
-                      textStyle: TextStyle(
-                        fontSize: 18,
-                      ),
-                      primary: Colors.white,
-                      backgroundColor: AppColors.primaryColor,
+    showDialog(
+        context: context,
+        builder: (context){
+          return Dialog(
+            insetPadding: EdgeInsets.all(10),
+            child: Container(
+              width: width * 0.9,
+              height: height * 0.7,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'please sign to confirm'.toUpperCase(),
+                    style: TextStyle(
+                      color: AppColors.primaryTextColor,
+                      fontSize: 22,
+                      fontWeight: FontWeight.w500,
                     ),
-                    onPressed: () {
-                      controller.uploadImg();
-                      Get.back();
-                    },
                   ),
-                ),
-              ],
-            );
-          });
-    else
-      Get.defaultDialog();
+                  Obx(() =>
+                      Column(
+                        children: [
+                          SizedBox(
+                            height: height * 0.02,),
+                          Container(
+                            height: height * 0.4,
+                            child: Stack(
+                              children: [
+                                SfSignaturePad(
+                                    onSignStart: () => controller.isClearVisible(false),
+                                    key: controller.signatureGlobalKey,
+                                    backgroundColor: Colors.white,
+                                    strokeColor: controller.currentColor.value,
+                                    minimumStrokeWidth: 4.0,
+                                    maximumStrokeWidth: 4.5),
+                                !controller.isClearVisible.value ? Align(
+                                  alignment: Alignment.bottomCenter,
+                                  child: GestureDetector(
+                                    onTap: () => controller.clearSign(),
+                                    child: Icon(
+                                      Icons.cancel,
+                                      color: Colors.black26,
+                                      size: 35,),
+                                  ),
+                                ) : Container(),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: height * 0.02,),
+                          Container(
+                            height: height * 0.05,
+                            width: width * 0.6,
+                            child: ListView(
+                              scrollDirection: Axis.horizontal,
+                              children: [
+                                Icon(Icons.palette_outlined, color: controller.currentColor.value, size: 40,),
+                                GestureDetector(
+                                  onTap: () => controller.changeStrokeColor(Colors.black),
+                                  child: DotWidget(
+                                    size: 16,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () => controller.changeStrokeColor(Colors.blueAccent),
+                                  child: DotWidget(
+                                    size: 16,
+                                    color: Colors.blueAccent,
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () => controller.changeStrokeColor(Colors.lightGreenAccent),
+                                  child: DotWidget(
+                                    size: 16,
+                                    color: Colors.lightGreenAccent,
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () => controller.changeStrokeColor(Colors.orangeAccent),
+                                  child: DotWidget(
+                                    size: 16,
+                                    color: Colors.orangeAccent,
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () => controller.changeStrokeColor(Colors.redAccent),
+                                  child: DotWidget(
+                                    size: 16,
+                                    color: Colors.redAccent,
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () => controller.changeStrokeColor(Colors.purpleAccent),
+                                  child: DotWidget(
+                                    size: 16,
+                                    color: Colors.purpleAccent,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      )
+                  ),
+                  SizedBox(height: height * 0.03),
+                  Container(
+                    height: height * 0.05,
+                    width: width * 0.3,
+                    child: TextButton(
+                      child: Text('ORDER'),
+                      style: TextButton.styleFrom(
+                        textStyle: TextStyle(
+                          fontSize: 18,
+                        ),
+                        primary: Colors.white,
+                        backgroundColor: AppColors.primaryColor,
+                      ),
+                      onPressed: () {
+                        controller.uploadImg();
+                        Get.back();
+                      },
+                    ),
+                  )
+                ],
+              ),
+            ),
+          );
+        });
   }
 
 }

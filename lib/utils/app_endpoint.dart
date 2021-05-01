@@ -22,6 +22,7 @@ class AppEndpoint {
   static const String UPLOAD_IMAGE = 'room/upload_base64';
   static const String GET_LIST_CART = 'room/get_all_cart_of_room';
   static const String LOGIN = 'users/login';
+  static const String TOURIST = 'users/get_url_tourist';
   static const String CATEGORY = 'category/get_list_category';
   static const String ALL_PROMOTION = 'promo/get_all_promo';
   static const String LIST_FOOD = 'food/get_list_food';

@@ -6,6 +6,7 @@ import 'package:khoaluantotnghiep2021/controller/home/history/history_controller
 import 'package:khoaluantotnghiep2021/controller/home/home_controller.dart';
 import 'package:khoaluantotnghiep2021/controller/login/login_controller.dart';
 import 'package:khoaluantotnghiep2021/ui/home/history/history_page.dart';
+import 'package:khoaluantotnghiep2021/ui/home/tourist/tourist_page.dart';
 import 'package:khoaluantotnghiep2021/ui/theme/app_colors.dart';
 
 import 'package:khoaluantotnghiep2021/ui/home/laundry/laundry_page.dart';
@@ -70,7 +71,7 @@ class HomePage extends GetView<HomeController> {
                   children: [
                     FoodServicePage(),
                     LaundryPage(),
-                    Text("Ok"),
+                    TouristPage(),
                     Text("Ok"),
                     Text("Ok"),
                     HistoryPage(),
