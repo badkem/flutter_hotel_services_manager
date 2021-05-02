@@ -58,4 +58,10 @@ class TouristController extends GetxController {
     fetchUrlTourist();
     super.onInit();
   }
+  @override
+  void onClose() {
+    webView = null;
+    Get.delete();
+    super.onClose();
+  }
 }

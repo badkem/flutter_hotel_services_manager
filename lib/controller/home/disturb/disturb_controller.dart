@@ -28,13 +28,13 @@ class DisturbController extends GetxController with SingleGetTickerProviderMixin
 
   @override
   void onInit() {
-     print('disturb');
     super.onInit();
   }
 
   @override
   void onClose() {
     animationController.dispose();
+    Get.delete();
     super.onClose();
   }
 }
