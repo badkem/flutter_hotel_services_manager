@@ -46,6 +46,7 @@ class FoodServiceController extends GetxController with SingleGetTickerProviderM
         cateList.assignAll(categories);
         cateList.insert(0, CategoryDatum(id: 0, name: 'Must Try'),);
         cateList.insert(1, CategoryDatum(id: 1, name: 'Promo'),);
+        cateList.refresh();
         tabController = TabController(length: cateList.length, vsync: this);
         tabController.addListener(() {if(tabController.indexIsChanging)getAllPromo();});
         update();

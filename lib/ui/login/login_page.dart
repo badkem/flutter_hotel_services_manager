@@ -16,7 +16,7 @@ class LoginPage extends GetView<LoginController> {
         builder: (_) {
           return Center(
             child: Container(
-              height: height * 0.55,
+              height: height * 0.6,
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
               margin: EdgeInsets.symmetric(horizontal: 24),
               decoration: BoxDecoration(

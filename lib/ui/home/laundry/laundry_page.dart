@@ -128,7 +128,6 @@ class LaundryPage extends GetView<LaundryController> {
                               controller.increaseCount(index);
                               controller.addItem(controller.laundryList[index]);
                               controller.calculateTotal();
-                              print(controller.laundryCartItem);
                             },
                             child: Icon(
                               Icons.add,

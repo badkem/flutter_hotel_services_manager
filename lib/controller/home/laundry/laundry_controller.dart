@@ -38,6 +38,7 @@ class LaundryController extends GetxController with SingleGetTickerProviderMixin
       var laundry =  await LaundryProvider().fetchListLaundry();
       if(laundryList != null){
         laundryList.assignAll(laundry);
+        laundryList.refresh();
       }
     } finally {
       isLoading(false);
