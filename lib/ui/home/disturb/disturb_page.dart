@@ -14,7 +14,7 @@ class _DisturbPageState extends State<DisturbPage> {
   double height, width;
   @override
   Widget build(BuildContext context) {
-    DisturbController controller = Get.find();
+    final DisturbController controller = Get.put(DisturbController());
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
     return Scaffold(

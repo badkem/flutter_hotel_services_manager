@@ -217,6 +217,7 @@ class LaundryController extends GetxController with SingleGetTickerProviderMixin
     getLaundryList();
     textNote = new TextEditingController();
     editQty = new TextEditingController();
+    print('laundry page');
     super.onInit();
   }
 

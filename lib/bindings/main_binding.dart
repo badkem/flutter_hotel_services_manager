@@ -11,26 +11,12 @@ import 'package:khoaluantotnghiep2021/controller/login/login_controller.dart';
 class MainBinding implements Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<LoginController>(() {
-      return LoginController();
-    });
-    Get.lazyPut<HomeController>(() {
-      return HomeController();
-    });
-    Get.lazyPut<FoodServiceController>(() {
-      return FoodServiceController();
-    });
-    Get.lazyPut<LaundryController>(() {
-      return LaundryController();
-    });
-    Get.lazyPut<HistoryController>(() {
-      return HistoryController();
-    });
-    Get.lazyPut<TouristController>(() {
-      return TouristController();
-    });
-    Get.lazyPut<DisturbController>(() {
-      return DisturbController();
-    });
+    Get.lazyPut<LoginController>(() => LoginController());
+    Get.lazyPut<HomeController>(() => HomeController());
+    Get.lazyPut<FoodServiceController>(() =>FoodServiceController());
+    Get.lazyPut<LaundryController>(() => LaundryController());
+    Get.lazyPut<HistoryController>(() => HistoryController());
+    Get.lazyPut<TouristController>(() => TouristController());
+    Get.lazyPut<DisturbController>(() => DisturbController());
   }
 }

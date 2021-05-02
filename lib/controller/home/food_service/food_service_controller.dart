@@ -58,59 +58,69 @@ class FoodServiceController extends GetxController with SingleGetTickerProviderM
   }
 
   void getFoodList() async {
-    var foods = await FoodServiceProvider().fetchListFood();
-    if (foodList != null) {
-      foodList.assignAll(foods);
-      if(foodCartItem.isNotEmpty){
-        for(int i = 0; i < foodList.length; i++){
-          for(int j = 0; j < foodCartItem.length; j++){
-            if(foodList[i].id == foodCartItem[j].id){
-              foodList[i].qty = foodCartItem[j].qty;
-              print('${foodList[i].name}: ' + '${foodList[i].qty}');
+    try {
+      isLoading(true);
+      var foods = await FoodServiceProvider().fetchListFood();
+      if (foodList != null) {
+        foodList.assignAll(foods);
+        if(foodCartItem.isNotEmpty){
+          for(int i = 0; i < foodList.length; i++){
+            for(int j = 0; j < foodCartItem.length; j++){
+              if(foodList[i].id == foodCartItem[j].id){
+                foodList[i].qty = foodCartItem[j].qty;
+                print('${foodList[i].name}: ' + '${foodList[i].qty}');
+              }
             }
           }
         }
-      }
-      foodList.removeWhere((element) => element.priority == 0);
-      if(allPromo.value.data.listPromo.data.isNotEmpty){
-        for(int x = 0; x < foodList.length; x++){
-          for(int i = 0; i < allPromo.value.data.listPromoFood.data.length; i++) {
-            if(allPromo.value.data.listPromoFood.data[i].foodId == foodList[x].id){
-              for(int j = 0; j < allPromo.value.data.listPromo.data.length; j++) {
-                foodList[x].discount.value = foodList[x].pricing - allPromo.value.data.listPromo.data[j].discount;
+        foodList.removeWhere((element) => element.priority == 0);
+        if(allPromo.value.data.listPromo.data.isNotEmpty){
+          for(int x = 0; x < foodList.length; x++){
+            for(int i = 0; i < allPromo.value.data.listPromoFood.data.length; i++) {
+              if(allPromo.value.data.listPromoFood.data[i].foodId == foodList[x].id){
+                for(int j = 0; j < allPromo.value.data.listPromo.data.length; j++) {
+                  foodList[x].discount.value = foodList[x].pricing - allPromo.value.data.listPromo.data[j].discount;
+                }
               }
             }
           }
         }
       }
+    } finally {
+      isLoading(false);
     }
   }
   
   void getFoodListByCat(int id) async {
-    var foods = await FoodServiceProvider().fetchListFoodByCat(id);
-    if (foodList != null) {
-      foodList.assignAll(foods);
-      if(foodCartItem.isNotEmpty){
-        for(int i = 0; i < foodList.length; i++){
-          for(int j = 0; j < foodCartItem.length; j++){
-            if(foodList[i].id == foodCartItem[j].id){
-              foodList[i].qty = foodCartItem[j].qty;
-              print('${foodList[i].name}: ' + '${foodList[i].qty}');
+    try {
+      isLoading(true);
+      var foods = await FoodServiceProvider().fetchListFoodByCat(id);
+      if (foodList != null) {
+        foodList.assignAll(foods);
+        if(foodCartItem.isNotEmpty){
+          for(int i = 0; i < foodList.length; i++){
+            for(int j = 0; j < foodCartItem.length; j++){
+              if(foodList[i].id == foodCartItem[j].id){
+                foodList[i].qty = foodCartItem[j].qty;
+                print('${foodList[i].name}: ' + '${foodList[i].qty}');
+              }
             }
           }
         }
-      }
-      if(allPromo.value.data.listPromo.data.isNotEmpty){
-        for(int x = 0; x < foodList.length; x++){
-          for(int i = 0; i < allPromo.value.data.listPromoFood.data.length; i++) {
-            if(allPromo.value.data.listPromoFood.data[i].foodId == foodList[x].id){
-              for(int j = 0; j < allPromo.value.data.listPromo.data.length; j++) {
-                foodList[x].discount.value = foodList[x].pricing - allPromo.value.data.listPromo.data[j].discount;
+        if(allPromo.value.data.listPromo.data.isNotEmpty){
+          for(int x = 0; x < foodList.length; x++){
+            for(int i = 0; i < allPromo.value.data.listPromoFood.data.length; i++) {
+              if(allPromo.value.data.listPromoFood.data[i].foodId == foodList[x].id){
+                for(int j = 0; j < allPromo.value.data.listPromo.data.length; j++) {
+                  foodList[x].discount.value = foodList[x].pricing - allPromo.value.data.listPromo.data[j].discount;
+                }
               }
             }
           }
         }
       }
+    } finally {
+      isLoading(false);
     }
   }
 
@@ -122,30 +132,35 @@ class FoodServiceController extends GetxController with SingleGetTickerProviderM
   }
 
   void getPromoList() async {
-    var foods = await FoodServiceProvider().fetchListFood();
-    foodList.assignAll(foods);
-    if(foodCartItem.isNotEmpty){
-      for(int i = 0; i < foodList.length; i++){
-        for(int j = 0; j < foodCartItem.length; j++){
-          if(foodList[i].id == foodCartItem[j].id){
-            foodList[i].qty = foodCartItem[j].qty;
-            print('${foodList[i].name}: ' + '${foodList[i].qty}');
-          }
-        }
-      }
-    }
-    if(allPromo.value.data.listPromo.data.isNotEmpty){
-      for(int x = 0; x < foodList.length; x++){
-        for(int i = 0; i < allPromo.value.data.listPromoFood.data.length; i++) {
-          if(allPromo.value.data.listPromoFood.data[i].foodId == foodList[x].id){
-            for(int j = 0; j < allPromo.value.data.listPromo.data.length; j++) {
-              foodList[x].discount.value = foodList[x].pricing - allPromo.value.data.listPromo.data[j].discount;
+    try {
+      isLoading(true);
+      var foods = await FoodServiceProvider().fetchListFood();
+      foodList.assignAll(foods);
+      if(foodCartItem.isNotEmpty){
+        for(int i = 0; i < foodList.length; i++){
+          for(int j = 0; j < foodCartItem.length; j++){
+            if(foodList[i].id == foodCartItem[j].id){
+              foodList[i].qty = foodCartItem[j].qty;
+              print('${foodList[i].name}: ' + '${foodList[i].qty}');
             }
           }
         }
       }
+      if(allPromo.value.data.listPromo.data.isNotEmpty){
+        for(int x = 0; x < foodList.length; x++){
+          for(int i = 0; i < allPromo.value.data.listPromoFood.data.length; i++) {
+            if(allPromo.value.data.listPromoFood.data[i].foodId == foodList[x].id){
+              for(int j = 0; j < allPromo.value.data.listPromo.data.length; j++) {
+                foodList[x].discount.value = foodList[x].pricing - allPromo.value.data.listPromo.data[j].discount;
+              }
+            }
+          }
+        }
+      }
+      foodList.removeWhere((element) => element.discount.value == 0);
+    } finally {
+      isLoading(false);
     }
-    foodList.removeWhere((element) => element.discount.value == 0);
   }
 
   //action cart

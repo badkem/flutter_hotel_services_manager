@@ -6,33 +6,23 @@ import 'package:khoaluantotnghiep2021/controller/home/tourist/tourist_controller
 import 'package:khoaluantotnghiep2021/ui/theme/app_colors.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-class TouristPage extends StatefulWidget {
-  @override
-  _TouristPageState createState() => _TouristPageState();
-}
-
-class _TouristPageState extends State<TouristPage> with AutomaticKeepAliveClientMixin{
-  TouristController controller = Get.find();
+class TouristPage extends GetView<TouristController> {
   @override
   Widget build(BuildContext context) {
     if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
-    super.build(context);
     return Scaffold(
-     body: Obx(() => controller.isLoading.value ?
-     Center(child: CircularProgressIndicator()) :
-     Stack(
-       children: <Widget>[
-         controller.webView,
-         controller.isWebViewLoading.value ?
-         Center(child: Text(
-             'Loading ' + '${controller.progress}%',
-             style: TextStyle(fontSize: 20, color: AppColors.primaryTextColor))) : Stack(),
-       ],
-     )
-     ),
+      body: Obx(() => controller.isLoading.value ?
+      Center(child: CircularProgressIndicator()) :
+      Stack(
+        children: <Widget>[
+          controller.webView,
+          controller.isWebViewLoading.value ?
+          Center(child: Text(
+              'Loading ' + '${controller.progress}%',
+              style: TextStyle(fontSize: 20, color: AppColors.primaryTextColor))) : Stack(),
+        ],
+      )
+      ),
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

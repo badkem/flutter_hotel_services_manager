@@ -25,6 +25,7 @@ class TouristController extends GetxController {
     _token = prefs.getString('user_token');
     try {
       isLoading(true);
+      isWebViewLoading(true);
       final response = await AppClients().post(_urlGetTourist,
           options: Options(
             headers: {
@@ -32,7 +33,6 @@ class TouristController extends GetxController {
             },
           ));
       tourist.value = Tourist.fromJson(response.data);
-      print(tourist.value.success);
     } on DioError catch (e) {
       print(e.error);
     } finally {

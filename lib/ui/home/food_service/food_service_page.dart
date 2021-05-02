@@ -14,6 +14,7 @@ import 'package:khoaluantotnghiep2021/ui/widgets/dot.dart';
 import 'package:khoaluantotnghiep2021/ui/widgets/modal_fit.dart';
 import 'package:khoaluantotnghiep2021/utils/app_endpoint.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:syncfusion_flutter_signaturepad/signaturepad.dart';
 
 // ignore: must_be_immutable
@@ -25,91 +26,175 @@ class FoodServicePage extends GetView<FoodServiceController> {
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
     return Scaffold(
-      body: Obx(() {
-        if (controller.isCategoryLoading.value && controller.isLoading.value)
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        else
-          return Column(
-            children: [
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                child: DefaultTabController(
-                  length: controller.cateList.length,
-                  initialIndex: 0,
-                  child: TabBar(
-                    onTap: (index) {
-                      if(controller.cateList[index].id == 0){
-                        controller.getFoodList();
-                      } else if(controller.cateList[index].id == 1) {
-                        controller.getPromoList();
-                      } else {
-                        controller.getFoodListByCat(controller.cateList[index].id);
-                      }
-                    },
-                    overlayColor: MaterialStateProperty.all(Colors.transparent),
-                    controller: controller.tabController,
-                    tabs: controller.cateList.map((element) => Tab(text: element.name.toUpperCase(),)).toList(),
-                    isScrollable: true,
-                    unselectedLabelColor: AppColors.primaryTextColor,
-                    labelStyle: TextStyle(fontSize: 18),
-                    indicatorSize: TabBarIndicatorSize.tab,
-                    indicator: BoxDecoration(
-                        gradient: LinearGradient(colors: [
-                          AppColors.primaryAccentColor,
-                          AppColors.primaryColor
-                        ]),
-                        borderRadius: BorderRadius.circular(50),
-                        color: Colors.redAccent),
-                  ),
-                ),
+      body: Obx(() => controller.isCategoryLoading.value ?
+      Shimmer.fromColors(
+          baseColor: Colors.grey[200],
+          highlightColor: Colors.grey[350],
+          child: GridView.builder(
+              itemCount: 4,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 4,
+                childAspectRatio: 1.5,
               ),
-              Expanded(
+              itemBuilder: (context, index) =>  Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                 child: Container(
-                  child: TabBarView(
-                    physics: NeverScrollableScrollPhysics(),
-                    controller: controller.tabController,
-                    children: controller.cateList.map((element){
-                      return itemList();
-                    }).toList(),
+                  width: 64,
+                  height: 34,
+                  decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(50)
+                  ),
+                  child: ClipOval(
+                    child: Text('Category'),
                   ),
                 ),
-              )
-            ],
-          );
-      }),
-      floatingActionButton: Obx(() {
-        if (controller.isVisible.value)
-          return Container();
-        else
-          return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 35, horizontal: 10),
-            child: FloatingActionButton(
-              onPressed: () => openCart(context),
-              child: Badge(
-                animationDuration: Duration(milliseconds: 300),
-                elevation: 1.0,
-                animationType: BadgeAnimationType.slide,
-                position: BadgePosition.topEnd(top: -18, end: -14),
-                badgeContent: Text(
-                  "${controller.totalCount}",
-                  style: TextStyle(fontSize: 18, color: AppColors.iconColor),
-                ),
-                child: Icon(
-                  Icons.shopping_cart,
-                  size: 35,
-                  color: AppColors.iconColor,
-                ),
+              ))) : Column(
+        children: [
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+            child: DefaultTabController(
+              length: controller.cateList.length,
+              initialIndex: 0,
+              child: TabBar(
+                onTap: (index) {
+                  if(controller.cateList[index].id == 0){
+                    controller.getFoodList();
+                  } else if(controller.cateList[index].id == 1) {
+                    controller.getPromoList();
+                  } else {
+                    controller.getFoodListByCat(controller.cateList[index].id);
+                  }
+                },
+                overlayColor: MaterialStateProperty.all(Colors.transparent),
+                controller: controller.tabController,
+                tabs: controller.cateList.map((element) => Tab(text: element.name.toUpperCase(),)).toList(),
+                isScrollable: true,
+                unselectedLabelColor: AppColors.primaryTextColor,
+                labelStyle: TextStyle(fontSize: 18),
+                indicatorSize: TabBarIndicatorSize.tab,
+                indicator: BoxDecoration(
+                    gradient: LinearGradient(colors: [
+                      AppColors.primaryAccentColor,
+                      AppColors.primaryColor
+                    ]),
+                    borderRadius: BorderRadius.circular(50),
+                    color: Colors.redAccent),
               ),
             ),
-          );
-      }),
+          ),
+          Expanded(
+            child: Container(
+              child: TabBarView(
+                physics: NeverScrollableScrollPhysics(),
+                controller: controller.tabController,
+                children: controller.cateList.map((element){
+                  return itemList();
+                }).toList(),
+              ),
+            ),
+          )
+        ],
+      )),
+      floatingActionButton: Obx(() => controller.isVisible.value ?
+      Container() :
+      Padding(
+        padding: const EdgeInsets.symmetric(vertical: 35, horizontal: 10),
+        child: FloatingActionButton(
+          onPressed: () => openCart(context),
+          child: Badge(
+            animationDuration: Duration(milliseconds: 300),
+            elevation: 1.0,
+            animationType: BadgeAnimationType.slide,
+            position: BadgePosition.topEnd(top: -18, end: -14),
+            badgeContent: Text(
+              "${controller.totalCount}",
+              style: TextStyle(fontSize: 18, color: AppColors.iconColor),
+            ),
+            child: Icon(
+              Icons.shopping_cart,
+              size: 35,
+              color: AppColors.iconColor,
+            ),
+          ),
+        ),
+      )
+      ),
     );
   }
 
   Widget itemList() {
-    return Obx(() => GridView.builder(
+    return Obx(() => controller.isLoading.value ?
+    Shimmer.fromColors(
+      baseColor: Colors.grey[200],
+      highlightColor: Colors.grey[350],
+      child: GridView.builder(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            childAspectRatio: 3 / 5,
+            crossAxisCount: 2,
+          ),
+          itemCount: 4,
+          itemBuilder: (context, index){
+            return Container(
+              margin: EdgeInsets.symmetric(vertical: 14, horizontal: 18),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.blueGrey.withOpacity(0.2),
+                      spreadRadius: 6,
+                      blurRadius: 7,
+                      offset: Offset(0, 2),
+                    ),
+                  ]),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: Image.asset(
+                      'assets/images/ic_logo_app.png',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'name',
+                            style: TextStyle(
+                                color: Colors.black87, fontSize: 25),
+                          ),
+                          Text(
+                            'This description',
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                                color: Colors.black87,
+                                fontStyle: FontStyle.italic,
+                                fontSize: 18),
+                          ),
+                          Text(
+                            '10000',
+                            style: TextStyle(
+                                color: Colors.red[700], fontSize: 18),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }),
+    ) :
+    GridView.builder(
         shrinkWrap: true,
         itemCount: controller.foodList.length,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -243,7 +328,8 @@ class FoodServicePage extends GetView<FoodServiceController> {
               ],
             ),
           );
-        }));
+        })
+    );
   }
 
   openCart(BuildContext context) {

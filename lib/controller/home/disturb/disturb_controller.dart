@@ -28,6 +28,7 @@ class DisturbController extends GetxController with SingleGetTickerProviderMixin
 
   @override
   void onInit() {
+     print('disturb');
     super.onInit();
   }
 

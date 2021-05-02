@@ -14,6 +14,7 @@ import 'package:khoaluantotnghiep2021/ui/widgets/dot.dart';
 import 'package:khoaluantotnghiep2021/ui/widgets/modal_fit.dart';
 import 'package:khoaluantotnghiep2021/utils/app_endpoint.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:syncfusion_flutter_signaturepad/signaturepad.dart';
 
 // ignore: must_be_immutable
@@ -25,151 +26,215 @@ class LaundryPage extends GetView<LaundryController> {
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
     return Scaffold(
-      body: Obx(() {
-        if (controller.isLoading.value)
-          return Center(child: CircularProgressIndicator());
-        else
-          return GridView.builder(
-              shrinkWrap: true,
-              itemCount: controller.laundryList.length,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                childAspectRatio: 3 / 5,
-                crossAxisCount: 2,
-              ),
-              itemBuilder: (context, index) {
-                return Container(
-                  margin: EdgeInsets.symmetric(vertical: 14, horizontal: 18),
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(8),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.blueGrey.withOpacity(0.2),
-                          spreadRadius: 6,
-                          blurRadius: 7,
-                          offset: Offset(0, 2),
-                        ),
-                      ]),
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: Image.network(
-                          '${AppEndpoint.BASE_URL_IMAGE}' +
-                              controller.laundryList[index].imagePath,
-                          fit: BoxFit.cover,
-                        ),
+      body: Obx(() => controller.isLoading.value ?
+      Shimmer.fromColors(
+        baseColor: Colors.grey[200],
+        highlightColor: Colors.grey[350],
+        child: GridView.builder(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              childAspectRatio: 3 / 5,
+              crossAxisCount: 2,
+            ),
+            itemCount: 4,
+            itemBuilder: (context, index){
+              return Container(
+                margin: EdgeInsets.symmetric(vertical: 14, horizontal: 18),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.blueGrey.withOpacity(0.2),
+                        spreadRadius: 6,
+                        blurRadius: 7,
+                        offset: Offset(0, 2),
                       ),
-                      SizedBox(
-                        height: 5,
+                    ]),
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: Image.asset(
+                        'assets/images/ic_logo_app.png',
+                        fit: BoxFit.cover,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                controller.laundryList[index].name,
-                                style: TextStyle(
-                                    color: Colors.black87, fontSize: 25),
-                              ),
-                              Text(
-                                controller.laundryList[index].description,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                    color: Colors.black87,
-                                    fontStyle: FontStyle.italic,
-                                    fontSize: 18),
-                              ),
-                              Text(
-                                NumberFormat.decimalPattern().format(
-                                        controller.laundryList[index].pricing) +
-                                    "₫",
-                                style: TextStyle(
-                                    color: Colors.red[700], fontSize: 18),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              controller.decreaseCount(index);
-                              controller.calculateTotal();
-                            },
-                            child: Icon(
-                              Icons.remove,
-                              size: 28,
-                            ),
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Obx(
-                            () => Text(
-                              '${controller.laundryList[index].qty}',
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'name',
                               style: TextStyle(
-                                  color: AppColors.primaryColor, fontSize: 28),
+                                  color: Colors.black87, fontSize: 25),
                             ),
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              controller.increaseCount(index);
-                              controller.addItem(controller.laundryList[index]);
-                              controller.calculateTotal();
-                            },
-                            child: Icon(
-                              Icons.add,
-                              size: 28,
+                            Text(
+                              'This description',
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  color: Colors.black87,
+                                  fontStyle: FontStyle.italic,
+                                  fontSize: 18),
                             ),
+                            Text(
+                              '10000',
+                              style: TextStyle(
+                                  color: Colors.red[700], fontSize: 18),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }),
+      ) :
+      GridView.builder(
+          shrinkWrap: true,
+          itemCount: controller.laundryList.length,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            childAspectRatio: 3 / 5,
+            crossAxisCount: 2,
+          ),
+          itemBuilder: (context, index) {
+            return Container(
+              margin: EdgeInsets.symmetric(vertical: 14, horizontal: 18),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.blueGrey.withOpacity(0.2),
+                      spreadRadius: 6,
+                      blurRadius: 7,
+                      offset: Offset(0, 2),
+                    ),
+                  ]),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: Image.network(
+                      '${AppEndpoint.BASE_URL_IMAGE}' +
+                          controller.laundryList[index].imagePath,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            controller.laundryList[index].name,
+                            style: TextStyle(
+                                color: Colors.black87, fontSize: 25),
+                          ),
+                          Text(
+                            controller.laundryList[index].description,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                                color: Colors.black87,
+                                fontStyle: FontStyle.italic,
+                                fontSize: 18),
+                          ),
+                          Text(
+                            NumberFormat.decimalPattern().format(
+                                controller.laundryList[index].pricing) +
+                                "₫",
+                            style: TextStyle(
+                                color: Colors.red[700], fontSize: 18),
                           ),
                         ],
                       ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          controller.decreaseCount(index);
+                          controller.calculateTotal();
+                        },
+                        child: Icon(
+                          Icons.remove,
+                          size: 28,
+                        ),
+                      ),
                       SizedBox(
-                        height: 5,
+                        width: 10,
+                      ),
+                      Obx(
+                            () => Text(
+                          '${controller.laundryList[index].qty}',
+                          style: TextStyle(
+                              color: AppColors.primaryColor, fontSize: 28),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          controller.increaseCount(index);
+                          controller.addItem(controller.laundryList[index]);
+                          controller.calculateTotal();
+                        },
+                        child: Icon(
+                          Icons.add,
+                          size: 28,
+                        ),
                       ),
                     ],
                   ),
-                );
-              });
-      }),
-      floatingActionButton: Obx(() {
-        if (controller.isVisible.value)
-          return Container();
-        else
-          return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 35, horizontal: 10),
-            child: FloatingActionButton(
-              onPressed: () => openCart(context),
-              child: Badge(
-                animationDuration: Duration(milliseconds: 300),
-                elevation: 1.0,
-                animationType: BadgeAnimationType.slide,
-                position: BadgePosition.topEnd(top: -18, end: -14),
-                badgeContent: Text(
-                  "${controller.totalCount}",
-                  style: TextStyle(fontSize: 18, color: AppColors.iconColor),
-                ),
-                child: Icon(
-                  Icons.shopping_cart,
-                  size: 35,
-                  color: AppColors.iconColor,
-                ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                ],
               ),
+            );
+          })
+      ),
+      floatingActionButton: Obx(() => controller.isVisible.value ?
+      Container() :
+      Padding(
+        padding: const EdgeInsets.symmetric(vertical: 35, horizontal: 10),
+        child: FloatingActionButton(
+          onPressed: () => openCart(context),
+          child: Badge(
+            animationDuration: Duration(milliseconds: 300),
+            elevation: 1.0,
+            animationType: BadgeAnimationType.slide,
+            position: BadgePosition.topEnd(top: -18, end: -14),
+            badgeContent: Text(
+              "${controller.totalCount}",
+              style: TextStyle(fontSize: 18, color: AppColors.iconColor),
             ),
-          );
-      }),
+            child: Icon(
+              Icons.shopping_cart,
+              size: 35,
+              color: AppColors.iconColor,
+            ),
+          ),
+        ),
+      )
+      ),
     );
   }
 
