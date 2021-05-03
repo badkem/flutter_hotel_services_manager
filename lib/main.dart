@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:khoaluantotnghiep2021/bindings/main_binding.dart';
 import 'package:khoaluantotnghiep2021/resources/strings/localization_service.dart';
@@ -9,6 +10,10 @@ import 'routes/app_pages.dart';
 
 void main() async {
   MainBinding().dependencies();
+  //block landscape mode
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   runApp(
     GetMaterialApp(
       initialRoute: Routes.LOGIN,
