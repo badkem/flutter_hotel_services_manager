@@ -1,5 +1,7 @@
 # Khóa luận tốt nghiệp 2021
 
+![header](https://capsule-render.vercel.app/api?type=rounded&color=gradient&text=%20Dean%20Hotel%20Manager%20&height=300&fontSize=50&textBg=true)
+
 Dean Hotel Manager with Flutter GetX pattern.
 
 
