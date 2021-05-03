@@ -11,13 +11,17 @@ import 'package:khoaluantotnghiep2021/ui/theme/app_colors.dart';
 import 'package:syncfusion_flutter_signaturepad/signaturepad.dart';
 
 class LaundryController extends GetxController with SingleGetTickerProviderMixin {
-  TextEditingController textNote;
+  TextEditingController textNote, editQty;
   var note = '';
+  var qty = '';
+
   var isLoading = true.obs;
   var isVisible = true.obs;
   var isClearVisible = true.obs;
+
   var laundryList = <LaundryDatum>[].obs;
   var laundryCartItem = <LaundryDatum>[].obs;
+
   var photo = Photo().obs;
   var cart = Cart().obs;
   var cartResult = CartResult().obs;
@@ -34,16 +38,18 @@ class LaundryController extends GetxController with SingleGetTickerProviderMixin
       var laundry =  await LaundryProvider().fetchListLaundry();
       if(laundryList != null){
         laundryList.assignAll(laundry);
-        print(laundryList);
+        laundryList.refresh();
       }
     } finally {
       isLoading(false);
     }
   }
 
+  //action cart
   void addItem(laundry) {
     var index = laundryCartItem.indexWhere((element) => element.id == laundry.id);
     if(index != -1){
+      //
     } else {
       laundryCartItem.add(laundry);
     }
@@ -66,19 +72,42 @@ class LaundryController extends GetxController with SingleGetTickerProviderMixin
     if(laundryList[i].qty > 0){
       laundryList[i].qty--;
       totalCount--;
-      print(laundryList[i].qty);
       if(laundryList[i].qty.value == 0) removeItem(laundryList[i].id);
     }
     if(totalCount <= 0) isVisible(true);
   }
 
   void calculateTotal() {
-    totalCartValue = 0.obs;
+    totalCartValue.value = 0;
     laundryCartItem.forEach((e) {
       totalCartValue += e.pricing * e.qty.value;
     });
   }
 
+  void onDeleteItemCart(laundryCart, qty) {
+    laundryCartItem.removeWhere((item) => item.id == laundryCart.id);
+    int count = laundryCartItem.map((e) => e.qty.value).fold(0, (prev, qty) => prev + qty);
+    totalCount.value = count;
+    if(totalCount.value <= 0) isVisible(true);
+    calculateTotal();
+  }
+
+  void onEditQtyItem(laundryCart) {
+    laundryCart.qty.value = (int.tryParse(qty));
+    if(laundryCart.qty == 0) {
+      laundryCartItem.removeWhere((item) => item.id == laundryCart.id);
+    }
+    int count = laundryCartItem.map((e) => e.qty.value).fold(0, (prev, qty) => prev + qty);
+    totalCount.value = count;
+    if(totalCount.value <= 0) isVisible(true);
+    totalCartValue.value = 0;
+    laundryCartItem.forEach((e) {
+      totalCartValue += e.pricing * e.qty.value;
+    });
+    Get.back();
+  }
+
+  //signature
   void changeStrokeColor(Color color) => currentColor.value = color;
 
   void clearSign() {
@@ -128,52 +157,50 @@ class LaundryController extends GetxController with SingleGetTickerProviderMixin
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
-          content: Column(
-            children: [
-              Text("Your oder is sent."),
-              SizedBox(height: 10),
-              TextButton(
-                child: Text('Okay'),
-                style: TextButton.styleFrom(
-                  textStyle: TextStyle(
-                    fontSize: 12,
-                  ),
-                  primary: Colors.white,
-                  backgroundColor: AppColors.primaryColor,
-                ),
-                onPressed: () => Get.back(),
+          content: Text("Your oder is sent."),
+          confirm: TextButton(
+            child: Text('Okay'),
+            style: TextButton.styleFrom(
+              textStyle: TextStyle(
+                fontSize: 12,
               ),
-            ],
-          )
+              primary: Colors.white,
+              backgroundColor: AppColors.primaryColor,
+            ),
+            onPressed: () => Get.back(),
+          ),
         );
         clearBooking();
-        print(cartResult.value);
+        print('Send success: ' + '${cartResult.value.success}');
       }
-      else Get.defaultDialog(
-          title: "Error!",
-          titleStyle: TextStyle(
-            color: AppColors.primaryTextColor,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-          content: Column(
-            children: [
-              Text("Cannot booking this time"),
-              SizedBox(height: 10),
-              TextButton(
-                child: Text('Okay'),
-                style: TextButton.styleFrom(
-                  textStyle: TextStyle(
-                    fontSize: 12,
+      else {
+        Get.defaultDialog(
+            title: "Error!",
+            titleStyle: TextStyle(
+              color: AppColors.primaryTextColor,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+            content: Column(
+              children: [
+                Text("Cannot booking this time"),
+                SizedBox(height: 10),
+                TextButton(
+                  child: Text('Okay'),
+                  style: TextButton.styleFrom(
+                    textStyle: TextStyle(
+                      fontSize: 12,
+                    ),
+                    primary: Colors.white,
+                    backgroundColor: AppColors.primaryColor,
                   ),
-                  primary: Colors.white,
-                  backgroundColor: AppColors.primaryColor,
+                  onPressed: () => Get.back(),
                 ),
-                onPressed: () => Get.back(),
-              ),
-            ],
-          )
-      );
+              ],
+            )
+        );
+        print('Send success: ' + '${cartResult.value.success}');
+      }
     } finally {
       isLoading(false);
     }
@@ -183,46 +210,23 @@ class LaundryController extends GetxController with SingleGetTickerProviderMixin
     laundryCartItem.clear();
     laundryList.forEach((element) => element.qty.value = 0);
     totalCount.value = 0;
+    textNote.clear();
     isVisible(true);
-  }
-
-  showDialog() {
-    return Get.defaultDialog(
-        title: "Login Failed",
-        titleStyle: TextStyle(
-          color: AppColors.primaryTextColor,
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-        ),
-        content: Column(
-          children: [
-            Text("Please contact via manager!"),
-            SizedBox(height: 10),
-            TextButton(
-              child: Text('Okay'),
-              style: TextButton.styleFrom(
-                textStyle: TextStyle(
-                  fontSize: 12,
-                ),
-                primary: Colors.white,
-                backgroundColor: AppColors.primaryColor,
-              ),
-              onPressed: () => Get.back(),
-            ),
-          ],
-        ));
   }
 
   @override
   void onInit() {
     getLaundryList();
     textNote = new TextEditingController();
+    editQty = new TextEditingController();
+    print('laundry page');
     super.onInit();
   }
 
   @override
   void onClose() {
     textNote.dispose();
+    editQty.dispose();
     Get.delete();
     super.onClose();
   }

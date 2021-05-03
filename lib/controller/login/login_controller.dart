@@ -84,6 +84,7 @@ class LoginController extends GetxController {
         ));
   }
 
+
   @override
   void onInit() {
     textRoomName = new TextEditingController();

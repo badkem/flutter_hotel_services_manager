@@ -16,8 +16,10 @@ class LaundryProvider {
   Photo photo;
   Cart laundryCart;
   CartResult cartResult;
+
   String _token;
   int _roomId;
+
   String _urlListLaundry = AppEndpoint.LIST_LAUNDRY;
   String _urlCreateLaundryCart = AppEndpoint.CREATE_LAUNDRY_CART;
   String _urlUpload = AppEndpoint.UPLOAD_IMAGE;
@@ -104,18 +106,17 @@ class LaundryProvider {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     _token = prefs.getString('user_token');
     _roomId = prefs.getInt('room_id');
-    var data = {
-      'roomId': _roomId,
-      'cartId': cartId,
-      'laundryList': laundryItem.map((item) => {
-        'laundryId': item.id,
-        'laundryPricing': item.pricing,
-        'number': item.qty.value,
-        'status': 1,
-        'currency': item.currency,
-      }).toList(),
-    };
-    print(data);
+    var data = jsonEncode({
+          'roomId': _roomId,
+          'cartId': cartId,
+          'laundryList': laundryItem.map((item) => {
+            'laundryId': item.id,
+            'laundryPricing': item.pricing,
+            'number': item.qty.value,
+            'status': 1,
+            'currency': item.currency,
+          }).toList(),
+        });
     try {
       final response = await AppClients().post(_urlAddLaundryToCart,
           data: data,

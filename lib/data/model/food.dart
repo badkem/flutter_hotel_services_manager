@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:get/get.dart';
+
 class Food {
   Food({
     this.success,
@@ -57,7 +59,7 @@ class Data {
       };
 }
 
-class FoodDatum {
+class FoodDatum extends GetxController{
   FoodDatum({
     this.id,
     this.name,
@@ -87,6 +89,8 @@ class FoodDatum {
   int priority;
   dynamic sku;
   dynamic prefixCode;
+  var qty = 0.obs;
+  var discount = 0.obs;
 
   factory FoodDatum.fromRawJson(String str) =>
       FoodDatum.fromJson(json.decode(str));
