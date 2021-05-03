@@ -88,6 +88,7 @@ class LaundryController extends GetxController with SingleGetTickerProviderMixin
     laundryCartItem.removeWhere((item) => item.id == laundryCart.id);
     int count = laundryCartItem.map((e) => e.qty.value).fold(0, (prev, qty) => prev + qty);
     totalCount.value = count;
+    if(totalCount.value <= 0) isVisible(true);
     calculateTotal();
   }
 
@@ -98,6 +99,7 @@ class LaundryController extends GetxController with SingleGetTickerProviderMixin
     }
     int count = laundryCartItem.map((e) => e.qty.value).fold(0, (prev, qty) => prev + qty);
     totalCount.value = count;
+    if(totalCount.value <= 0) isVisible(true);
     totalCartValue.value = 0;
     laundryCartItem.forEach((e) {
       totalCartValue += e.pricing * e.qty.value;

@@ -31,6 +31,7 @@ class HomePage extends GetView<HomeController> {
     HotelInfoController _hotelItemController = Get.find();
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
+
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(

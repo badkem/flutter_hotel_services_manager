@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:khoaluantotnghiep2021/data/model/hotel_item.dart';
 import 'package:khoaluantotnghiep2021/utils/app_clients.dart';
@@ -8,6 +9,7 @@ import 'package:khoaluantotnghiep2021/utils/app_endpoint.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HotelInfoController extends GetxController {
+  final pageController = PageController();
   var isLoading = true.obs;
   var _token;
   var _urlGetHotelItem = AppEndpoint.GET_HOTEL_ITEM;
@@ -36,6 +38,7 @@ class HotelInfoController extends GetxController {
     }
     return hotelItem.value;
   }
+
   @override
   void onInit() {
     getHotelItem();
@@ -44,6 +47,7 @@ class HotelInfoController extends GetxController {
 
   @override
   void onClose() {
+    pageController.dispose();
     Get.delete();
     super.onClose();
   }
