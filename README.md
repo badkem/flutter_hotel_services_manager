@@ -1,6 +1,9 @@
+![header](https://capsule-render.vercel.app/api?type=wave&color=gradient&height=300&section=footer&text=Hi%20Guys&fontSize=90)
+
 # Khóa luận tốt nghiệp 2021
 
 Dean Hotel Manager with Flutter GetX pattern.
+
 
 ## Preview
  ![](https://media.giphy.com/media/QypmflHDkmPc6it86C/giphy.gif)
