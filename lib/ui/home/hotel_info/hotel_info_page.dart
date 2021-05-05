@@ -6,18 +6,8 @@ import 'package:khoaluantotnghiep2021/ui/theme/app_colors.dart';
 import 'package:khoaluantotnghiep2021/utils/app_endpoint.dart';
 import 'package:shimmer/shimmer.dart';
 
-class HotelInfoPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: HotelInfoItem(),
-    );
-  }
-}
-
 // ignore: must_be_immutable
-class HotelInfoItem extends GetView<HotelInfoController> {
+class HotelInfoPage extends GetView<HotelInfoController> {
   double height, width;
   @override
   Widget build(BuildContext context) {
@@ -87,7 +77,7 @@ class HotelInfoItem extends GetView<HotelInfoController> {
         ListView.builder(
             itemCount: controller.hotelItem.value.data.data.length,
             itemBuilder: (context, index) =>  InkWell(
-              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => HotelInfoItemDetail(imgPath: controller.hotelItem.value.data.data[index].imagePaths,))),
+              onTap: () => hotelItemInfoDetail(context, controller.hotelItem.value.data.data[index].imagePaths),
               child: Container(
                 height: height * 0.20,
                 margin: EdgeInsets.symmetric(vertical: 14, horizontal: 18),
@@ -116,24 +106,26 @@ class HotelInfoItem extends GetView<HotelInfoController> {
         )
     );
   }
-}
-
-class HotelInfoItemDetail extends StatelessWidget {
-  final String imgPath;
-
-  const HotelInfoItemDetail({Key key, this.imgPath}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.vertical,
-      child: Image.network(
-        '${AppEndpoint.BASE_URL_IMAGE + imgPath
-            .replaceAll('["', '')
-            .replaceAll('"]', '')}',
-        fit: BoxFit.cover,
-        width: 70,
-      ),
-    );
+  hotelItemInfoDetail(BuildContext context, String imgPath) {
+    showDialog(
+        context: context, builder: (context){
+      return Dialog(
+        insetPadding: EdgeInsets.all(10),
+        child: Container(
+          width: width * 0.9,
+          height: height * 0.75,
+          child: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Image.network(
+              '${AppEndpoint.BASE_URL_IMAGE + imgPath
+                  .replaceAll('["', '')
+                  .replaceAll('"]', '')}',
+              fit: BoxFit.cover,
+              width: 70,
+            ),
+          ),
+        ),
+      );
+    });
   }
 }

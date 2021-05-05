@@ -8,7 +8,6 @@ import 'package:khoaluantotnghiep2021/controller/home/home_controller.dart';
 import 'package:khoaluantotnghiep2021/controller/home/hotel_info/hotel_info_controller.dart';
 import 'package:khoaluantotnghiep2021/controller/home/laundry/laundry_controller.dart';
 import 'package:khoaluantotnghiep2021/controller/home/tourist/tourist_controller.dart';
-import 'package:khoaluantotnghiep2021/controller/login/login_controller.dart';
 import 'package:khoaluantotnghiep2021/ui/theme/app_colors.dart';
 
 import 'laundry/laundry_page.dart';
@@ -23,7 +22,6 @@ class HomePage extends GetView<HomeController> {
   double height, width;
   @override
   Widget build(BuildContext context) {
-    LoginController l = Get.find();
     FoodServiceController _foodController = Get.find();
     LaundryController _laundryController = Get.find();
     HistoryController _historyController = Get.find();
@@ -47,13 +45,13 @@ class HomePage extends GetView<HomeController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text( 'Room: ' +
-                          l.textRoomName.text,
+                          controller.roomName.value,
                           style: TextStyle(
                               fontSize: 20,
                               color: AppColors.primaryTextColor),
                         ),
                         Text( 'GUEST NAME: ' +
-                          l.guestName.value,
+                          controller.guestName.value,
                           style: TextStyle(
                               fontSize: 18, color: AppColors.primaryTextColor),
                         ),
@@ -114,7 +112,6 @@ class HomePage extends GetView<HomeController> {
                     _tourController.fetchUrlTourist();
                     break;
                   case 3:
-                    print(3);
                     break;
                   case 4:
                     _hotelItemController.getHotelItem();

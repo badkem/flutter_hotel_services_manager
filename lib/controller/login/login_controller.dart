@@ -12,7 +12,6 @@ class LoginController extends GetxController {
   TextEditingController textRoomName, textLabel;
   var isLoading = true.obs;
   String roomName, label = '';
-  var guestName = ''.obs;
   var room = Room().obs;
   var user = User().obs;
 
@@ -24,12 +23,11 @@ class LoginController extends GetxController {
         if (room != null) {
           room.value = roomData;
           login(label, roomName);
-          guestName.value = room.value.data.customerName;
           SharedPreferences prefs = await SharedPreferences.getInstance();
           prefs.setInt('room_id', room.value.data.id);
-          print(guestName);
-          print(room.value.success);
-          print(room.value.data);
+          prefs.setString('room_name', room.value.data.roomName);
+          prefs.setString('customer_name', room.value.data.customerName);
+          print(room.value.data.customerName);
         }
       } catch(e) {
         showDialog();
@@ -46,8 +44,6 @@ class LoginController extends GetxController {
       var userData = await LoginProvider().loginRequest(roomLabel, roomName);
       if (user != null) {
         user.value = userData;
-        print(user.value.data.user);
-        print(user.value.data.user);
         SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.setString('user_token', user.value.data.token);
         Get.to(() => HomePage());
