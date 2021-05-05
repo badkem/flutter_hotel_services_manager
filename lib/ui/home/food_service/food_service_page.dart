@@ -218,10 +218,13 @@ class FoodServicePage extends GetView<FoodServiceController> {
             child: Column(
               children: [
                 Expanded(
-                  child: Image.network(
-                    '${AppEndpoint.BASE_URL_IMAGE}' +
-                        controller.foodList[index].imagePath,
-                    fit: BoxFit.cover,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
+                    child: Image.network(
+                      '${AppEndpoint.BASE_URL_IMAGE}' +
+                          controller.foodList[index].imagePath,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
                 SizedBox(

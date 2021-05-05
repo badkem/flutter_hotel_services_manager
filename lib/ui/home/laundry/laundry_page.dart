@@ -120,10 +120,13 @@ class LaundryPage extends GetView<LaundryController> {
               child: Column(
                 children: [
                   Expanded(
-                    child: Image.network(
-                      '${AppEndpoint.BASE_URL_IMAGE}' +
-                          controller.laundryList[index].imagePath,
-                      fit: BoxFit.cover,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
+                      child: Image.network(
+                        '${AppEndpoint.BASE_URL_IMAGE}' +
+                            controller.laundryList[index].imagePath,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                   SizedBox(
