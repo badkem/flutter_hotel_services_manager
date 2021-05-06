@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
-
 import 'package:dio/dio.dart';
+
 import 'package:khoaluantotnghiep2021/data/model/cart.dart';
 import 'package:khoaluantotnghiep2021/data/model/cart_result.dart';
 import 'package:khoaluantotnghiep2021/data/model/category.dart';
@@ -31,6 +31,10 @@ class FoodServiceProvider {
   String _urlCreateFoodCart = AppEndpoint.CREATE_FOOD_CART;
   String _urlAddFoodToCart = AppEndpoint.ADD_FOOD_TO_CART;
 
+  retry(future, delay) {
+    Future.delayed(Duration(milliseconds: delay), () => future());
+  }
+
   Future<List<CategoryDatum>> fetchCategory() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     _token = prefs.getString('user_token');
@@ -43,7 +47,8 @@ class FoodServiceProvider {
           ));
       category = Category.fromJson(response.data);
     } on DioError catch (e) {
-      print(e.error);
+      if(category.success == false) retry(fetchCategory(), 500);
+      print('trying retry!');
     }
     return category.data.data;
   }
@@ -66,7 +71,7 @@ class FoodServiceProvider {
           ));
       food = Food.fromJson(response.data);
     } on DioError catch (e) {
-      print(e.error);
+      if(food.success == false) retry(fetchListFood(), 500);
     }
     return food.data.data;
   }

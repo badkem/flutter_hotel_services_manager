@@ -25,6 +25,10 @@ class LaundryProvider {
   String _urlUpload = AppEndpoint.UPLOAD_IMAGE;
   String _urlAddLaundryToCart = AppEndpoint.ADD_LAUNDRY_TO_CART;
 
+  retry(future, delay) {
+    Future.delayed(Duration(milliseconds: delay), () => future());
+  }
+
   Future<List<LaundryDatum>> fetchListLaundry() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     _token = prefs.getString('user_token');
@@ -44,7 +48,7 @@ class LaundryProvider {
           ));
       laundry = Laundry.fromJson(response.data);
     } on DioError catch (e) {
-      print(e.error);
+      if(laundry.success == false) retry(fetchListLaundry(), 500);
     }
     return laundry.data.data;
   }
