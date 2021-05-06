@@ -141,8 +141,10 @@ class LaundryPage extends GetView<LaundryController> {
                         children: [
                           Text(
                             controller.laundryList[index].name,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
                             style: TextStyle(
-                                color: Colors.black87, fontSize: 25),
+                                color: Colors.black87, fontSize: 22),
                           ),
                           Text(
                             controller.laundryList[index].description,

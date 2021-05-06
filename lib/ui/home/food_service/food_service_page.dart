@@ -86,7 +86,6 @@ class FoodServicePage extends GetView<FoodServiceController> {
           Expanded(
             child: Container(
               child: TabBarView(
-                physics: NeverScrollableScrollPhysics(),
                 controller: controller.tabController,
                 children: controller.cateList.map((element){
                   return itemList();
@@ -239,8 +238,10 @@ class FoodServicePage extends GetView<FoodServiceController> {
                       children: [
                         Text(
                           controller.foodList[index].name,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
                           style: TextStyle(
-                              color: Colors.black87, fontSize: 25),
+                              color: Colors.black87, fontSize: 22),
                         ),
                         Text(
                           controller.foodList[index].description,
