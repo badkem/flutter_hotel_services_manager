@@ -87,6 +87,7 @@ class FoodServicePage extends GetView<FoodServiceController> {
             child: Container(
               child: TabBarView(
                 controller: controller.tabController,
+                physics: NeverScrollableScrollPhysics(),
                 children: controller.cateList.map((element){
                   return itemList();
                 }).toList(),

@@ -50,23 +50,23 @@ class FoodServiceController extends GetxController with SingleGetTickerProviderM
         tabController = TabController(length: cateList.length, vsync: this);
         tabController.addListener(() {
           if(tabController.indexIsChanging)getAllPromo();
-          switch(tabController.index){
-            case 0:
-              getFoodList();
-              break;
-            case 1:
-              getPromoList();
-              break;
-            case 2:
-              getFoodListByCat(cateList[tabController.index].id);
-              break;
-            case 3:
-              getFoodListByCat(cateList[tabController.index].id);
-              break;
-            case 4:
-              getFoodListByCat(cateList[tabController.index].id);
-              break;
-          }
+          // switch(tabController.index){
+          //   case 0:
+          //     getFoodList();
+          //     break;
+          //   case 1:
+          //     getPromoList();
+          //     break;
+          //   case 2:
+          //     getFoodListByCat(cateList[tabController.index].id);
+          //     break;
+          //   case 3:
+          //     getFoodListByCat(cateList[tabController.index].id);
+          //     break;
+          //   case 4:
+          //     getFoodListByCat(cateList[tabController.index].id);
+          //     break;
+          // }
         });
         update();
         getFoodList();
